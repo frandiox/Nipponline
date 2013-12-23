@@ -7,13 +7,12 @@
 var express = require('express'),
 	routes = require('./routes'),
 	i18n = require('i18next'),
-	http = require('http'),
 	path = require('path');
 
 i18n.init({
-  saveMissing: true,
-  debug: true,
-  resGetPath: 'public/locales/__lng__/__ns__.json'
+	saveMissing: true,
+	debug: true,
+	resGetPath: 'public/locales/__lng__/__ns__.json'
 });
 
 var app = express();
@@ -36,7 +35,7 @@ app.configure(function(){
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 var server = app.listen(app.get('port'));
