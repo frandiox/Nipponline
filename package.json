@@ -1,0 +1,23 @@
+{
+  "name": "Nipponline",
+  "version": "0.0.1",
+  "author": "Francisco Dios, Sergio Balbuena",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frankdiox/Nipponline.git"
+  },
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": ">=3.4.7",
+    "jade": "*",
+    "socket.io": ">=0.9.16",
+    "stylus": ">=0.41.3",
+    "i18next": ">= 1.7.1"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
+}
