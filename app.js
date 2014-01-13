@@ -8,7 +8,10 @@ var express = require('express'),
 	routes = require('./routes'),
 	i18n = require('i18next'),
 	path = require('path'),
+	nconf = require('nconf'),
 	database = require('./src/database.js');
+
+nconf.file('config.json');
 
 i18n.init({
 	saveMissing: true,

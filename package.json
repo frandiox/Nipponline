@@ -16,7 +16,8 @@
     "socket.io": ">=0.9.16",
     "stylus": ">=0.41.3",
     "i18next": ">= 1.7.1",
-    "mongoose": ">= 3.8.3"
+    "mongoose": ">= 3.8.3",
+    "nconf": ">= 0.6.9"
   },
   "engines": {
     "node": ">=0.10"
