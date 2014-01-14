@@ -52,7 +52,12 @@ io.sockets.on('connection', function (socket) {
   socket.on('getsyllabes',function (data, callback){
 
   	database.getSyllabes({$and: [{ obsolete : { $exists : false } }]}, function(err,docs){
-  		callback(docs);
+  		if(err){
+  			console.log('Error getting the syllabes: '+err);
+  		}
+  		else{
+  			callback(docs);
+  		}
   	});
 
   });
@@ -66,5 +71,3 @@ i18n.registerAppHelper(server);
 app.get('/', routes.index);
 
 console.log('Express server listening on port ' + app.get('port'));
-
-
