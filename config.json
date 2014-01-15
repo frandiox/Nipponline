@@ -1,17 +1,19 @@
 {
   "name": "Nipponline",
-  "db_lang": {
-	"user": "",
-	"pass": "",
-	"location": "localhost",
-	"port": "27017",
-	"name": "npl_jp"
-  },
-  "db_forum": {
-	"user": "",
-	"pass": "",
-	"location": "localhost",
-	"port": "27017",
-	"name": "0"
+  "db": {
+	"lang":{
+		"user": "",
+		"pass": "",
+		"location": "localhost",
+		"port": "27017",
+		"name": "npl_jp"
+	},
+	"forum":{
+		"user": "",
+		"pass": "",
+		"location": "localhost",
+		"port": "27017",
+		"name": "0"
+	}
   }
 }
