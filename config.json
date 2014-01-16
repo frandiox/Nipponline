@@ -1,5 +1,6 @@
 {
   "name": "Nipponline",
+  "sessionSecret": "yoursecrethere",
   "db": {
 	"lang":{
 		"user": "",

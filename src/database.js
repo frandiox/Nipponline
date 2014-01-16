@@ -42,7 +42,7 @@ exports.getUidByUsername = function(username, callback){
 
         doc = JSON.stringify(doc);
 
-        if(!doc){
+        if(!doc || doc == 'null'){
             callback(new Error('User does not exist'));
         }
         else{
@@ -66,7 +66,7 @@ exports.getUserFields = function(uid, fields, callback){
 
         doc = JSON.stringify(doc);
 
-        if(!doc){
+        if(!doc || doc == 'null'){
             callback(new Error('User or fields don\'t not exist'));
         }
         else{
