@@ -20,14 +20,14 @@ exports.getSyllabes = function(find, callback){
 
     syllabes.find(find, function(err,docs){
         if(err){
-            callback(err);
+            return callback(err);
         }
 
         if(docs == []){
-            callback(new Error('Syllabes not found'));
+            return callback(new Error('Syllabes not found'));
         }
         else{
-            callback(err,docs);
+            return callback(err,docs);
         }
     });
 
@@ -37,16 +37,16 @@ exports.getUidByUsername = function(username, callback){
 
     users.findOne({'_key': 'username:uid'},{'_id':0}).select(username).exec(function(err,doc){
         if(err){
-            callback(err);
+            return callback(err);
         }
 
         doc = JSON.stringify(doc);
 
         if(!doc || doc == 'null'){
-            callback(new Error('User does not exist'));
+            return callback(new Error('User does not exist'));
         }
         else{
-            callback(null,JSON.parse(doc)[username]);
+            return callback(null,JSON.parse(doc)[username]);
         }
     });
 
@@ -61,16 +61,16 @@ exports.getUserFields = function(uid, fields, callback){
 
     users.findOne({'_key': 'user:'+uid},{'_id':0}).select(selectQuery).exec(function(err,doc){
         if(err){
-            callback(err);
+            return callback(err);
         }
 
         doc = JSON.stringify(doc);
 
         if(!doc || doc == 'null'){
-            callback(new Error('User or fields don\'t not exist'));
+            return callback(new Error('User or fields don\'t not exist'));
         }
         else{
-            callback(null,JSON.parse(doc));
+            return callback(null,JSON.parse(doc));
         }
     });
 
