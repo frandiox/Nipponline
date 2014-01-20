@@ -10,7 +10,8 @@ var express = require('express'),
 	path = require('path'),
 	nconf = require('nconf'),
 	database = require('./src/database.js'),
-	session = require('./src/session.js');
+	session = require('./src/session.js'),
+	socket = require('./src/socket.js');
 
 nconf.file('config.json');
 
@@ -61,23 +62,7 @@ var server = app.listen(app.get('port'));
 var io = require('socket.io').listen(server);
 
 // Configuring sockets
-io.sockets.on('connection', function (socket) {
-
-	// Respuesta en caso de peticion de silabas
-	socket.on('getsyllabes',function (data, callback){
-
-		database.getSyllabes({$and: [{ obsolete : { $exists : false } }]}, function(err,docs){
-			if(err){
-				console.log('Error getting the syllabes: '+err);
-			}
-			else{
-				callback(docs);
-			}
-		});
-
-	});
-
-});
+socket.configure(io);
 
 // This line allows for the use of i18n translation inside templates (.jade)
 i18n.registerAppHelper(server);
