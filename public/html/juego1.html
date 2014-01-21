@@ -13,6 +13,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="javascripts/i18next-1.7.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="javascripts/stats.js"></script>
         <script src="javascripts/game1.js"></script>
          
     </head>
@@ -22,7 +23,7 @@
                 <span id="progress_bar1" style="width: 0%"></span>
             </div>
             <canvas id="stage" width="375" height="375" style="display:none"></canvas>
-            <button id="boton1" type="button" onclick="updateStreak(0); nextImg();" style="display: none">next</button>
+            <button id="boton1" type="button" onclick="skip();" style="display: none">next</button>
             <input id="input1" type="text" style="display: none"></input> 
             <select id="select1" style="display: none">
                 <option value="Hiragana">Hiragana</option>

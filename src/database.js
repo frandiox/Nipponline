@@ -75,3 +75,47 @@ exports.getUserFields = function(uid, fields, callback){
     });
 
 };
+
+exports.getGame1Stats = function(uid, callback){
+
+    users.findOne({'_key': 'uid:game1Stats'},{'_id':0}).select(uid).exec(function(err,doc){
+        if(err){
+            return callback(err);
+        }
+
+        if(!doc || doc == 'null'){
+            return callback(new Error('Stats for game1 do not exist'));
+        }
+        else{
+            return callback(null,doc);
+        }
+    });
+}
+
+exports.setGame1Stats = function(uid, newStats, callback){
+
+    var stat = {};
+    stat[uid] = newStats;
+
+    users.collection.update({'_key': 'uid:game1Stats'},{$set:stat},function(err){
+        if(err){
+            return callback(err);
+        }
+        else{
+            callback(null);
+        }
+    });
+}
+
+exports.updateGame1Stats = function(uid, stats, callback){
+
+    module.exports.getGame1Stats(uid, function(err,oldStats){
+        if(err){
+            return callback(err);
+        }
+        else{
+            console.log('OldStats in DB: '+oldStats);
+            // MERGE STATS AND SET DATA HERE
+        }
+    });
+}

@@ -1,22 +1,23 @@
-var manifest;
-var queue;
-var totalLoaded;
-var images;
-var currentImg;
-var stage;
-var tweening;
-var progress, progressbg;
-var kanaRoute = "images/kana/";
-var kana = [{"name":"a","ruta":"a"},{"name":"o","ruta":"o-1"},{"name":"o","ruta":"o-2"},{"name":"ka","ruta":"ka"},{"name":"ma","ruta":"ma"},{"name":"ta","ruta":"ta"}];
-var visualize = 2;
-var streak, best, streakText, bestText;
+var socket = io.connect(),
+    manifest,
+    queue,
+    totalLoaded,
+    images,
+    currentImg,
+    stage,
+    tweening,
+    progress, progressbg,
+    kanaRoute = "images/kana/",
+    kana = [{"name":"a","ruta":"a"},{"name":"o","ruta":"o-1"},{"name":"o","ruta":"o-2"},{"name":"ka","ruta":"ka"},{"name":"ma","ruta":"ma"},{"name":"ta","ruta":"ta"}],
+    visualize = 2,
+    streak, best, streakText, bestText,
+    stats = new Game1Stats(), counter = 0, timeIni;
 
 function game1(){
 
-  var socket = io.connect();
   socket.emit('getsyllabes', 0, function (data) {
     kana = data;
-   
+
     manifest = [];
     for(var i=0; i<kana.length; i++){
       manifest.push({src:kanaRoute+"hiragana/"+kana[i].route+".gif", id:kana[i].route});
@@ -82,8 +83,9 @@ function handleComplete(event){
 
         $("#progress_bar_container").css("display","none");
         $("#stage").css("display","block");
-
+        timeIni = new Date().getTime();
         $("#input1").focus();
+        
   }, 1000);
   
 }
@@ -109,7 +111,29 @@ function handleFileLoad(event){
 function handleLoadComplete(event){
 }
 
+function skip(){
+
+  if(currentImg < kana.length){
+    stats.updateHiragana(kana[currentImg].romaji);
+  }
+  else{
+    stats.updateKatakana(kana[currentImg%kana.length].romaji);
+  }
+
+  updateStreak(0);
+  nextImg();
+}
+
 function nextImg(){
+
+  counter++;
+  if(counter > 4){
+    counter = 0;
+    console.log('stats: %j',stats);
+    socket.emit('game1:stats', stats, function (){
+      stats = new Game1Stats();
+    });
+  }
 
   if(!tweening){
     tweening = true;
@@ -137,6 +161,7 @@ function finishShift(){
   tweening = false;
   $("#input1").val("");
   $("#input1").attr("disabled",false);
+  timeIni = new Date().getTime();
   $("#input1").focus();
 }
 
@@ -152,19 +177,31 @@ function setLngVariables(){
 
 function inputChange(){
   if($("#input1").val().toLowerCase() === kana[currentImg%kana.length].romaji){
-    nextImg();
+
+    var time = new Date().getTime() - timeIni;
+    if(currentImg < kana.length){
+      stats.updateHiragana(kana[currentImg].romaji,time);
+    }
+    else{
+      stats.updateKatakana(kana[currentImg%kana.length].romaji,time);
+    }
+
     updateStreak(streak+1);
     if(streak > best){
       updateBest(streak);
     }
+
+    nextImg();
   }
 }
 
 function selectChange(){
-  updateStreak(0);
   visualize = $("#select1")[0].selectedIndex;
   if(visualize !== 2){
-    nextImg();
+    skip();
+  }
+  else{
+    updateStreak(0);
   }
 }
 
@@ -174,6 +211,7 @@ function updateStreak(value){
 }
 
 function updateBest(value){
+  stats.updateBest(value);
   best = value;
   bestText.text = i18n.t("best")+": "+value;
 }

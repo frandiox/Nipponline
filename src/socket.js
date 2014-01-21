@@ -33,6 +33,25 @@ exports.configure = function(io){
 				}
 			});
 
+
+		});
+
+		// Estadisticas del juego 1
+		socket.on('game1:stats', function(stats, callback){
+			console.log('Stats received: %j',stats);
+			if(uid !== 0){
+				// CHECK STATS RECEIVED FOR HAX 1337 DATA HERE, THEN IF ALL GOES WELL UPDATE
+				database.updateGame1Stats(uid.toString(),stats,function(err,stats){
+					if(err){
+						console.log('Error updating the statistics: '+err);
+					}
+					else{
+						console.log('DB Updated');
+					}
+				});
+			}
+
+			return callback();
 		});
 
 	});
