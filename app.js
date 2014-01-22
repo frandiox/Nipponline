@@ -112,3 +112,21 @@ app.post('/login',
 /////////////////////////////////////////////////////////
 
 console.log('Express server listening on port ' + app.get('port'));
+/*utils.mergeGame1Stats({'best':14,'hiragana':{'a':{'sumTime':300,'sumSuccess':4,'sumSkip':5},
+										'b':{'sumTime':1787,'sumSuccess':2,'sumSkip':0}},'katakana':{
+											'c':{'sumTime':24,'sumSuccess':3,'sumSkip':0}
+										}},
+					   {'best':8,'hiragana':{'a':{'sumTime':562,'sumSuccess':2,'sumSkip':0}},
+					   'katakana':{'b':{'sumTime':4567,'sumSuccess':2,'sumSkip':8},
+									'c':{'sumTime':76,'sumSuccess':1,'sumSkip':9}}
+	},function(err,merged){
+			console.log(merged);
+});*/
+
+/*
+database.getGame1Stats('1',function(err,doc){
+	console.log(doc);
+	for(var prop in doc){
+		console.log('property '+prop);
+	}
+});*/

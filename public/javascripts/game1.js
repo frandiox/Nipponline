@@ -1,4 +1,5 @@
 var socket = io.connect(),
+    sessionAck = false,
     manifest,
     queue,
     totalLoaded,
@@ -13,8 +14,12 @@ var socket = io.connect(),
     streak, best, streakText, bestText,
     stats = new Game1Stats(), counter = 0, timeIni;
 
-function game1(){
+socket.on('acknowledge', function(ack){
+  sessionAck = ack;
+});
 
+function game1(){
+  
   socket.emit('getsyllabes', 0, function (data) {
     kana = data;
 
@@ -114,10 +119,10 @@ function handleLoadComplete(event){
 function skip(){
 
   if(currentImg < kana.length){
-    stats.updateHiragana(kana[currentImg].romaji);
+    stats.updateHiragana(kana[currentImg].id);
   }
   else{
-    stats.updateKatakana(kana[currentImg%kana.length].romaji);
+    stats.updateKatakana(kana[currentImg%kana.length].id);
   }
 
   updateStreak(0);
@@ -129,10 +134,11 @@ function nextImg(){
   counter++;
   if(counter > 4){
     counter = 0;
-    console.log('stats: %j',stats);
-    socket.emit('game1:stats', stats, function (){
-      stats = new Game1Stats();
-    });
+    if(sessionAck){
+      socket.emit('game1:stats', stats, function (){
+        stats = new Game1Stats();
+      });
+    }
   }
 
   if(!tweening){
@@ -180,10 +186,10 @@ function inputChange(){
 
     var time = new Date().getTime() - timeIni;
     if(currentImg < kana.length){
-      stats.updateHiragana(kana[currentImg].romaji,time);
+      stats.updateHiragana(kana[currentImg].id,time);
     }
     else{
-      stats.updateKatakana(kana[currentImg%kana.length].romaji,time);
+      stats.updateKatakana(kana[currentImg%kana.length].id,time);
     }
 
     updateStreak(streak+1);

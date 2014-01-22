@@ -13,11 +13,13 @@ exports.configure = function(io){
 		socketCookieParser(socket.handshake, {}, function(err) {
 			sessionID = socket.handshake.signedCookies['express.sid'];
 			session.sessionStore.get(sessionID, function(err, sessionData) {
-				if (!err && sessionData.passport.user) {
+				if (!err && sessionData && sessionData.passport && sessionData.passport.user) {
 					uid = sessionData.passport.user;
 				} else {
 					uid = 0;
 				}
+
+				socket.emit('acknowledge',uid===0 ? false : true);
 			});
 		});
 
@@ -41,7 +43,7 @@ exports.configure = function(io){
 			console.log('Stats received: %j',stats);
 			if(uid !== 0){
 				// CHECK STATS RECEIVED FOR HAX 1337 DATA HERE, THEN IF ALL GOES WELL UPDATE
-				database.updateGame1Stats(uid.toString(),stats,function(err,stats){
+				database.updateGame1Stats(uid.toString(),stats,function(err){
 					if(err){
 						console.log('Error updating the statistics: '+err);
 					}

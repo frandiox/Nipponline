@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    nconf = require('nconf');
+    nconf = require('nconf'),
+    utils = require('./utils.js');
 
 nconf.file('config.json');
 
@@ -87,7 +88,7 @@ exports.getGame1Stats = function(uid, callback){
             return callback(new Error('Stats for game1 do not exist'));
         }
         else{
-            return callback(null,doc);
+            return callback(null,doc.toJSON()[uid]);
         }
     });
 }
@@ -114,8 +115,20 @@ exports.updateGame1Stats = function(uid, stats, callback){
             return callback(err);
         }
         else{
-            console.log('OldStats in DB: '+oldStats);
-            // MERGE STATS AND SET DATA HERE
+            
+            utils.mergeGame1Stats(oldStats,stats,function(err,merged){
+                if(err){
+                    return callback(err);
+                }
+
+                module.exports.setGame1Stats(uid,merged,function(err){
+                    if(err){
+                        return callback(err);
+                    }
+                })
+            });
         }
+
+        return callback(null);
     });
 }

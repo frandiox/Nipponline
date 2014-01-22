@@ -27,43 +27,41 @@ function Game1Stats(best, hiragana, katakana){
   this.updateKatakana = updateKatakana;
 
   function updateBest (value){
-    if(value){
+    if(value !== undefined){
       this.best = value;
     }
-    return this.best;
   };
 
-  function updateHiragana (romaji, time){
-    if(romaji){
-      if(!this.hiragana[romaji]){
-        this.hiragana[romaji] = {'sumTime':0, 'sumSuccess':0, 'sumSkip':0};
+  function updateHiragana (id, time){
+    if(id !== undefined){
+      if(!this.hiragana[id]){
+        this.hiragana[id] = {'sumTime':0, 'sumSuccess':0, 'sumSkip':0};
       }
 
       if(time){
-        this.hiragana[romaji].sumTime += time;
-        this.hiragana[romaji].sumSuccess += 1;
+        this.hiragana[id].sumTime += time;
+        this.hiragana[id].sumSuccess += 1;
       }
       else{
-        this.hiragana[romaji].sumSkip += 1;
+        this.hiragana[id].sumSkip += 1;
       }
     }
-    return this.hiragana;
   };
 
-  function updateKatakana (romaji, time){
-    if(romaji){
-      if(!this.katakana[romaji]){
-        this.katakana[romaji] = {'sumTime':0, 'sumSuccess':0, 'sumSkip':0};
+  function updateKatakana (id, time){
+    if(id !== undefined){
+      if(!this.katakana[id]){
+        this.katakana[id] = {'sumTime':0, 'sumSuccess':0, 'sumSkip':0};
       }
 
       if(time){
-        this.katakana[romaji].sumTime += time;
-        this.katakana[romaji].sumSuccess += 1;
+        this.katakana[id].sumTime += time;
+        this.katakana[id].sumSuccess += 1;
       }
       else{
-        this.katakana[romaji].sumSkip += 1;
+        this.katakana[id].sumSkip += 1;
       }
     }
-    return this.katakana;
   };
+  
 }
