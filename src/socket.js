@@ -2,13 +2,15 @@ var	express = require('express'),
 	nconf = require('nconf'),
 	socketCookieParser = express.cookieParser(nconf.get('sessionSecret')), 
 	database = require('./database.js'),
-	session = require('./session.js');
+	session = require('./session.js'),
+	utils = require('./utils.js');
 
 exports.configure = function(io){
 	// Configuring sockets
 	io.sockets.on('connection', function (socket) {
 
 		var sessionID, uid;
+		var game1Best;
 
 		socketCookieParser(socket.handshake, {}, function(err) {
 			sessionID = socket.handshake.signedCookies['express.sid'];
@@ -31,7 +33,21 @@ exports.configure = function(io){
 					console.log('Error getting the syllabes: '+err);
 				}
 				else{
-					callback(docs);
+					if(uid !== 0){
+						database.getGame1Stats(uid.toString(),function(err,stats){
+							if(err){
+								console.log('Error getting user stats: '+err);
+							}
+							else{
+								game1Best = stats.best;
+								callback([docs,stats.best]);
+							}
+						});
+					}
+					else{
+						game1Best = 0;
+						callback([docs,0]);
+					}
 				}
 			});
 
@@ -40,15 +56,22 @@ exports.configure = function(io){
 
 		// Estadisticas del juego 1
 		socket.on('game1:stats', function(stats, callback){
-			console.log('Stats received: %j',stats);
+			
 			if(uid !== 0){
-				// CHECK STATS RECEIVED FOR HAX 1337 DATA HERE, THEN IF ALL GOES WELL UPDATE
-				database.updateGame1Stats(uid.toString(),stats,function(err){
+				utils.checkGame1Stats(game1Best,stats,function(err){
 					if(err){
-						console.log('Error updating the statistics: '+err);
+						console.log('Error in stats received: '+err);
 					}
 					else{
-						console.log('DB Updated');
+						game1Best = stats.best;
+						database.updateGame1Stats(uid.toString(),stats,function(err){
+							if(err){
+								console.log('Error updating the statistics: '+err);
+							}
+							else{
+								console.log('DB Updated');
+							}
+						});
 					}
 				});
 			}

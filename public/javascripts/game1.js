@@ -21,7 +21,9 @@ socket.on('acknowledge', function(ack){
 function game1(){
   
   socket.emit('getsyllabes', 0, function (data) {
-    kana = data;
+    kana = data[0];
+
+    updateBest(data[1]);
 
     manifest = [];
     for(var i=0; i<kana.length; i++){
@@ -137,6 +139,7 @@ function nextImg(){
     if(sessionAck){
       socket.emit('game1:stats', stats, function (){
         stats = new Game1Stats();
+        stats.best = best;
       });
     }
   }
