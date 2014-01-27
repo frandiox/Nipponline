@@ -137,7 +137,7 @@ function nextImg(){
   if(counter > 4){
     counter = 0;
     if(sessionAck){
-      socket.emit('game1:stats', stats, function (){
+      socket.emit('game1:stats', [stats, streak], function (){
         stats = new Game1Stats();
         stats.best = best;
       });

@@ -1,9 +1,13 @@
-exports.checkGame1Stats = function(oldBest,stats,callback){
+exports.checkGame1Stats = function(oldBest,stats,oldStreak,streak,callback){
 	var bestIncr = stats.best-oldBest,
 		totalSuccSkip = 0;
 
 	if(bestIncr > 5){
 		return callback(new Error('Best score increased too much'));
+	}
+
+	if(streak-oldStreak > 5){
+		return callback(new Error('Streak increased too much'));
 	}
 
 	for(var syllabary in stats){

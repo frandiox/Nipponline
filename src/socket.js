@@ -10,7 +10,7 @@ exports.configure = function(io){
 	io.sockets.on('connection', function (socket) {
 
 		var sessionID, uid;
-		var game1Best;
+		var game1Best, game1Streak;
 
 		socketCookieParser(socket.handshake, {}, function(err) {
 			sessionID = socket.handshake.signedCookies['express.sid'];
@@ -40,12 +40,14 @@ exports.configure = function(io){
 							}
 							else{
 								game1Best = stats.best;
+								game1Streak = 0;
 								callback([docs,stats.best]);
 							}
 						});
 					}
 					else{
 						game1Best = 0;
+						game1Streak = 0;
 						callback([docs,0]);
 					}
 				}
@@ -58,13 +60,13 @@ exports.configure = function(io){
 		socket.on('game1:stats', function(stats, callback){
 			
 			if(uid !== 0){
-				utils.checkGame1Stats(game1Best,stats,function(err){
+				utils.checkGame1Stats(game1Best,stats[0],game1Streak,stats[1],function(err){
 					if(err){
 						console.log('Error in stats received: '+err);
 					}
 					else{
-						game1Best = stats.best;
-						database.updateGame1Stats(uid.toString(),stats,function(err){
+						game1Best = stats[0].best;
+						database.updateGame1Stats(uid.toString(),stats[0],function(err){
 							if(err){
 								console.log('Error updating the statistics: '+err);
 							}

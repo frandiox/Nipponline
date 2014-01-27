@@ -77,6 +77,21 @@ exports.getUserFields = function(uid, fields, callback){
 
 };
 
+exports.setDefaultStats = function(uid, callback){
+
+    var statsGame1 = {};
+    statsGame1[uid] = {'best':0,'hiragana':{},'katakana':{}};
+
+    users.collection.update({'_key':'uid:game1Stats'},{$set:statsGame1},{upsert:true},function(err){
+        if(err){
+            return callback(err);
+        }
+        else{
+            callback(null);
+        }
+    });
+}
+
 exports.getGame1Stats = function(uid, callback){
 
     users.findOne({'_key': 'uid:game1Stats'},{'_id':0}).select(uid).exec(function(err,doc){
