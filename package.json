@@ -7,6 +7,7 @@
     "type": "git",
     "url": "https://github.com/frankdiox/Nipponline.git"
   },
+  "private": true,
   "engines": {
     "node": ">=0.10"
   },
@@ -14,13 +15,12 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": ">=3.4.7",
+    "express": "~3.4.2",
     "mongoose": ">= 3.8.3",
-    "handlebars-runtime": ">=1.0.12",
-    "express3-handlebars": ">=0.5.0",
-    "MD5": ">=1.2.0",
+    "handlebars-runtime": "~1.0.12",
+    "express3-handlebars": "~0.5.0",
+    "MD5": "~1.2.0",
     "socket.io": ">=0.9.16",
-    "stylus": ">=0.41.3",
     "i18next": ">= 1.7.1",
     "nconf": ">= 0.6.9",
     "bcrypt": ">= 0.7.7",

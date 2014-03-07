@@ -1,6 +1,6 @@
 {
   "name": "Nipponline",
-  "sessionSecret": "yoursecrethere",
+  "sessionSecret": "155ee7bd-fa6b-4995-a940-b05efe3595bd",
   "db": {
 	"lang":{
 		"user": "",
@@ -14,7 +14,7 @@
 		"pass": "",
 		"location": "localhost",
 		"port": "27017",
-		"name": "0"
+		"name": "Nipponline"
 	}
   }
 }
