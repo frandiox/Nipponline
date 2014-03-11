@@ -1,0 +1,40 @@
+	a	a	i	i	u	u	e	e	o	o	ya	ya	yu	yu	yo	yo
+	あ	ア	い	イ	う	ウ	え	エ	お	オ						
+k	ka	ka	ki	ki	ku	ku	ke	ke	ko	ko	kya	kya	kyu	kyu	kyo	kyo
+	か	カ	き	キ	く	ク	け	ケ	こ	コ	きゃ	キャ	きゅ	キュ	きょ	キョ
+s	sa	sa	shi	shi	su	su	se	se	so	so	sha	sha	shu	shu	sho	sho
+	さ	サ	し	シ	す	ス	せ	セ	そ	ソ	しゃ	シャ	しゅ	シュ	しょ	ショ
+t	ta	ta	chi	chi	tsu	tsu	te	te	to	to	cha	cha	chu	chu	cho	cho
+	た	タ	ち	チ	つ	ツ	て	テ	と	ト	ちゃ	チャ	ちゅ	チュ	ちょ	チョ
+n	na	na	ni	ni	nu	nu	ne	ne	no	no	nya	nya	nyu	nyu	nyo	nyo
+	な	ナ	に	ニ	ぬ	ヌ	ね	ネ	の	ノ	にゃ	ニャ	にゅ	ニュ	にょ	ニョ
+h	ha	ha	hi	hi	fu	fu	he	he	ho	ho	hya	hya	hyu	hyu	hyo	hyo
+	は	ハ	ひ	ヒ	ふ	フ	へ	ヘ	ほ	ホ	ひゃ	ヒャ	ひゅ	ヒュ	ひょ	ヒョ
+m	ma	ma	mi	mi	mu	mu	me	me	mo	mo	mya	mya	myu	myu	myo	myo
+	ま	マ	み	ミ	む	ム	め	メ	も	モ	みゃ	ミャ	みゅ	ミュ	みょ	ミョ
+y	ya	ya			yu	yu			yo	yo						
+	や	ヤ			ゆ	ユ			よ	ヨ						
+r	ra	ra	ri	ri	ru	ru	re	re	ro	ro	rya	rya	ryu	ryu	ryo	ryo
+	ら	ラ	り	リ	る	ル	れ	レ	ろ	ロ	りゃ	リャ	りゅ	リュ	りょ	リョ
+w	wa	wa	wi*	wi*			we*	we*	o	o						
+	わ	ワ	ゐ	ヰ			ゑ	ヱ	を	ヲ						
+n.*	n	n														
+	ん	ン														
+.gemination*	*	*														
+	っ	ッ														
+.longvowel*	*	*														
+		ー														
+.iteration-1*	*	*														
+	ゝ	ヽ														
+.iteration-2*	*	*														
+	ゞ	ヾ														
+g.k-	ga	ga	gi	gi	gu	gu	ge	ge	go	go	gya	gya	gyu	gyu	gyo	gyo
+	が	ガ	ぎ	ギ	ぐ	グ	げ	ゲ	ご	ゴ	ぎゃ	ギャ	ぎゅ	ギュ	ぎょ	ギョ
+z.s-	za	za	ji	ji	zu	zu	ze	ze	zo	zo	ja	ja	ju	ju	jo	jo
+	ざ	ザ	じ	ジ	ず	ズ	ぜ	ゼ	ぞ	ゾ	じゃ	ジャ	じゅ	ジュ	じょ	ジョ
+d.t-	da	da	ji*	ji*	zu*	zu*	de	de	do	do	ja*	ja*	ju*	ju*	jo*	jo*
+	だ	ダ	ぢ	ヂ	づ	ヅ	で	デ	ど	ド	ぢゃ	ヂャ	ぢゅ	ヂュ	ぢょ	ヂョ
+b.h-	ba	ba	bi	bi	bu	bu	be	be	bo	bo	bya	bya	byu	byu	byo	byo
+	ば	バ	び	ビ	ぶ	ブ	べ	ベ	ぼ	ボ	びゃ	ビャ	びゅ	ビュ	びょ	ビョ
+p.h+	pa	pa	pi	pi	pu	pu	pe	pe	po	po	pya	pya	pyu	pyu	pyo	pyo
+	ぱ	パ	ぴ	ピ	ぷ	プ	ぺ	ペ	ぽ	ポ	ぴゃ	ピャ	ぴゅ	ピュ	ぴょ	ピョ
