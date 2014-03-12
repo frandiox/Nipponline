@@ -60,7 +60,8 @@ exports.getGame1Stats = function(uid, callback){
         }
 
         if(!doc || doc == 'null'){
-            return callback(new Error('Stats for game1 do not exist'));
+            module.exports.setDefaultStats(uid, function(){});
+            return callback(null,{'best':0,'hiragana':{},'katakana':{}});
         }
         else{
             return callback(null,doc.toJSON()[uid]);
