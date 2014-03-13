@@ -59,7 +59,7 @@ exports.getGame1Stats = function(uid, callback){
             return callback(err);
         }
 
-        if(typeof doc === 'undefined' || !doc || doc == 'null'){
+        if(typeof doc === 'undefined' || !doc || doc == 'null' || typeof doc.toJSON() === 'undefined'){
             module.exports.setDefaultStats(uid, function(){});
             return callback(null,{'best':0,'hiragana':{},'katakana':{}});
         }
