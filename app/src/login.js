@@ -1,4 +1,4 @@
-var database = require('./database.js'),
+var database = require('../../controllers/database.js'),
 	bcrypt = require('bcrypt');
 
 exports.loginLocal = function(user, pass, callback){
@@ -24,7 +24,6 @@ exports.loginLocal = function(user, pass, callback){
 						if(err){
 							return callback(err);
 						}
-						
 						if(!res){
 							return callback(new Error('Wrong password'));
 						}

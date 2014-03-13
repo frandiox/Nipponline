@@ -1,7 +1,7 @@
 #!usr/bin/perl
 
 #use: perl csv2upsert.pl <db> <collection> <id_init> <csv_file_input> <file_output>
-#perl csv2upsert.pl npl_jp syllabes 0 japanese_sounds.csv upsertsFile
+#perl csv2upsert.pl npl_jp syllables 0 japanese_sounds.csv upsertsFile
 
 die "Wrong input\n" if $#ARGV < 4;
 my $db = $ARGV[0];

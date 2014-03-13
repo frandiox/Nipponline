@@ -1,7 +1,7 @@
 var	express = require('express'),
 	nconf = require('nconf'),
 	socketCookieParser = express.cookieParser(nconf.get('sessionSecret')), 
-	database = require('./database.js'),
+	db_syllables = require('../../controllers/app_syllables.js'),
 	session = require('./session.js'),
 	utils = require('./utils.js');
 
@@ -26,15 +26,15 @@ exports.configure = function(io){
 		});
 
 		// Respuesta en caso de peticion de silabas
-		socket.on('getsyllabes', function (data, callback){
+		socket.on('getsyllables', function (data, callback){
 
-			database.getSyllabes({$and: [{ obsolete : { $exists : false } }]}, function(err,docs){
+			db_syllables.getSyllables({$and: [{ obsolete : { $exists : false } }]}, function(err,docs){
 				if(err){
-					console.log('Error getting the syllabes: '+err);
+					console.log('Error getting the syllables: '+err);
 				}
 				else{
 					if(uid !== 0){
-						database.getGame1Stats(uid.toString(),function(err,stats){
+						db_syllables.getGame1Stats(uid.toString(),function(err,stats){
 							if(err){
 								console.log('Error getting user stats: '+err);
 							}
@@ -58,7 +58,6 @@ exports.configure = function(io){
 
 		// Estadisticas del juego 1
 		socket.on('game1:stats', function(stats, callback){
-			
 			if(uid !== 0){
 				utils.checkGame1Stats(game1Best,stats[0],game1Streak,stats[1],function(err){
 					if(err){
@@ -66,7 +65,7 @@ exports.configure = function(io){
 					}
 					else{
 						game1Best = stats[0].best;
-						database.updateGame1Stats(uid.toString(),stats[0],function(err){
+						db_syllables.updateGame1Stats(uid.toString(),stats[0],function(err){
 							if(err){
 								console.log('Error updating the statistics: '+err);
 							}

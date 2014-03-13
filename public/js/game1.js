@@ -19,8 +19,7 @@ socket.on('acknowledge', function(ack){
 });
 
 function game1(){
-  
-  socket.emit('getsyllabes', 0, function (data) {
+  socket.emit('getsyllables', 0, function (data) {
     kana = data[0];
 
     updateBest(data[1]);
@@ -45,7 +44,7 @@ function game1(){
   // Text
   streakText = new createjs.Text("", "20px Play", "#ff7700"); streakText.x = 280; streakText.y = 20; streakText.textBaseline = "alphabetic";
   bestText = new createjs.Text("", "20px Play", "#ff7700"); bestText.x = 280; bestText.y = 40; bestText.textBaseline = "alphabetic";
-  
+
   // Internationalization
   i18n.init({ useCookie: false },setLngVariables);
 
@@ -71,7 +70,7 @@ function game1(){
 function handleProgress(event){
   $("#progress_bar1").css("width",Math.floor(event.loaded*100)+"%");
 }
- 
+
 function handleComplete(event){
 
   setTimeout(function(){
@@ -80,7 +79,7 @@ function handleComplete(event){
         stage.addChild(bestText);
         stage.addChild(images[0]);
         stage.update();
-        
+
         $("#input1").on("input",inputChange);
         $("#select1").change(selectChange);
 
@@ -92,11 +91,11 @@ function handleComplete(event){
         $("#stage").css("display","block");
         timeIni = new Date().getTime();
         $("#input1").focus();
-        
+
   }, 1000);
-  
+
 }
- 
+
 function handleFileLoad(event){
 
   switch(event.item.type){
@@ -150,7 +149,7 @@ function nextImg(){
 
     createjs.Tween.get(images[currentImg]).to({x:-images[currentImg].getBounds().width, scaleX:0.25, scaleY:0.25}, 1000);
 
-    var nextImg = Math.floor(visualize === 2 ? Math.random()*2*kana.length : visualize*kana.length+Math.random()*kana.length); 
+    var nextImg = Math.floor(visualize === 2 ? Math.random()*2*kana.length : visualize*kana.length+Math.random()*kana.length);
     currentImg = currentImg === nextImg ? visualize === 2 ? (nextImg+1)%(kana.length*2) : visualize*kana.length+((nextImg+1)%kana.length) : nextImg;
 
     images[currentImg].x = 375;
