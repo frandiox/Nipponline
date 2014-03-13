@@ -1,6 +1,6 @@
 var	express = require('express'),
 	nconf = require('nconf'),
-	socketCookieParser = express.cookieParser(nconf.get('sessionSecret')), 
+	socketCookieParser = express.cookieParser(nconf.get('sessionSecret')),
 	db_syllables = require('../../controllers/app_syllables.js'),
 	session = require('./session.js'),
 	utils = require('./utils.js');

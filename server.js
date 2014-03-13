@@ -40,7 +40,8 @@ app.configure(function(){
         secret: nconf.get('sessionSecret'),
         key: 'express.sid',
         cookie: {
-            maxAge: 60 * 60 * 24 * 30 * 1000
+            maxAge: 60 * 60 * 24 * 30 * 1000,
+            domain: nconf.get('domain')
         }
     }));
 
