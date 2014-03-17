@@ -33,8 +33,15 @@ Create a database with the data provide in the 'database' folder of this project
 First, create a database in MongoDB with the data provide in the 'database' folder of this project, as well as a user with read privileges. If NodeBB is installed, provide the same session secret in config.json and a user with read and write privileges.
 
 Run:
+
 1. npm install -g grunt-cli
 2. npm install
 3. You may need to do 'npm install' for some modules
 4. grunt init:dev
 5. grunt server
+
+##License
+
+All the code developed by Nipponline team is under the license GPLv3.
+
+All the creative assets uploaded to this project is under this license: !["Creative Commons"](http://es.creativecommons.org/blog/wp-content/uploads/2013/04/by-nc-sa.eu_petit.png "Creative Commons")
