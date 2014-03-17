@@ -7,7 +7,7 @@ var models_syllables = require('../app/models/syllables'),
 
 
 exports.index = function(req, res){
-    fs.readFile('./public/html/juego1.html', function (err, html) {
+    fs.readFile('./public/html/game1.html', function (err, html) {
         if (err) {
             throw err;
         }

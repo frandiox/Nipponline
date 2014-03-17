@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LELELELE</title>
+
+        <style>/* Removes Mobile Highlight */ *{-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}</style>
+        <link href='http://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="css/progress_bar.css">
+
+        <script src="http://code.createjs.com/easeljs-0.7.0.min.js"></script>
+        <script src="http://code.createjs.com/tweenjs-0.5.0.min.js"></script>
+        <script src="http://code.createjs.com/preloadjs-0.4.0.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="js/i18next-1.7.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/stats.js"></script>
+        <script src="js/game1.js"></script>
+
+    </head>
+    <body onload="game1();">
+        <div>
+            <div id="progress_bar_container" class="progress-bar blue stripes">
+                <span id="progress_bar1" style="width: 0%"></span>
+            </div>
+            <canvas id="stage" width="375" height="375" style="display:none"></canvas>
+            <button id="boton1" type="button" onclick="skip();" style="display: none">next</button>
+            <input id="input1" type="text" style="display: none"></input>
+            <select id="select1" style="display: none">
+                <option value="Hiragana">Hiragana</option>
+                <option value="Katakana">Katakana</option>
+                <option id="both" value="Both" selected="selected">Ambos</option>
+            </select>
+        </div>
+    </body>
+</html>
