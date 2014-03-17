@@ -42,6 +42,10 @@ Run:
 
 ##License
 
-All the code developed by Nipponline team is under the license GPLv3.
+All the code developed by Nipponline team is under the GPLv3 license.
 
-All the creative assets uploaded to this project is under this license: !["Creative Commons"](http://es.creativecommons.org/blog/wp-content/uploads/2013/04/by-nc-sa.eu_petit.png "Creative Commons")
+All the creative assets used in this project are under the [Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 International
+License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+![CC-BY-NC-SA](http://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)
