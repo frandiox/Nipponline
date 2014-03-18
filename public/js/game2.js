@@ -1,4 +1,5 @@
-var manifest,
+var socket = io.connect(),
+	manifest,
 	queue,
 	totalLoaded,
 	images,
@@ -34,59 +35,13 @@ function init() {
 		animName: "monster1"
 	});
 	manifest.push({src:"images/app2/bg.png", id:"bg", imageType:"background"});
-	manifest.push({src:"images/app2/explosion.png", id:"fireball"});
+	manifest.push({src:"images/app2/fireball.png", id:"fireball"});
 
     queue = new createjs.LoadQueue();
     queue.addEventListener("progress", handleProgress);
     queue.addEventListener("complete", handleComplete);
     queue.addEventListener("fileload", handleFileLoad);
     queue.loadManifest(manifest);
-
-
-	/*var imgMonsterARun = new Image();
-
-	imgMonsterARun.src = "images/dragon.png";
-
-*/
-
-
-/*
-	var spriteSheet = new createjs.SpriteSheet({
-		// image to use
-		images: [imgMonsterARun],
-		// width, height & registration point of each sprite
-		frames: {width: 176, height: 144, regX: 88, regY: 72},
-		animations: {
-			attack: [0, 52, "attack"]
-		}
-	});
-	*/
-
-	// create a BitmapAnimation instance to display and play back the sprite sheet:
-	/*bmpAnimation = new createjs.Sprite(spriteSheet);
-
-	// start playing the first sequence:
-	bmpAnimation.gotoAndPlay("attack");     //animate
-
-	// set up a shadow. Note that shadows are ridiculously expensive. You could display hundreds
-	// of animated rats if you disabled the shadow.
-	bmpAnimation.shadow = new createjs.Shadow("#454", 0, 5, 4);
-
-	bmpAnimation.name = "monster1";
-	bmpAnimation.x = 100;
-	bmpAnimation.y = 100;*/
-
-	// have each monster start at a specific frame
-	//bmpAnimation.currentFrame = 0;
-	//stage.addChild(bmpAnimation);
-
-	/*var circle = new createjs.Shape();
-	circle.graphics.beginFill("red").drawCircle(0, 0, 50);
-	circle.x = 100;
-	circle.y = 100;
-	stage.addChild(circle);*/
-
-
 }
 
 function update(){
@@ -101,11 +56,10 @@ function handleProgress(event){
 
 function handleComplete(event){
 
-  setTimeout(function(){
+	setTimeout(function(){
   		counter = 0;
   		counter2 = 0;
   		createjs.Ticker.setFPS(30);
-		//createjs.Ticker.addEventListener("tick",stage);
 		createjs.Ticker.addEventListener("tick",update);
 
         stage.removeAllChildren();
@@ -119,7 +73,7 @@ function handleComplete(event){
 
         $("#progress_bar_container").css("display","none");
         $("#stage").css("display","block");
-  }, 1000);
+	}, 1000);
 
 }
 
@@ -128,54 +82,59 @@ function handleFileLoad(event){
   switch(event.item.type){
 
     case createjs.LoadQueue.IMAGE:
-      //image loaded
-      var img = new Image();
-      img.src = event.item.src;
+		//image loaded
+      	var img = new Image();
+      	img.src = event.item.src;
+      	$(img).load( function() {
 
-      switch(event.item.imageType){
+	      	switch(event.item.imageType){
 
-      	case "spriteSheet":
-      		var spriteSheet =
-      			new createjs.SpriteSheet({
-					images: [img],
-					frames: event.item.frames,
-					animations: event.item.animations
-				}),
-				animation = new createjs.Sprite(spriteSheet);
+		      	case "spriteSheet":
+		      		var spriteSheet =
+		      			new createjs.SpriteSheet({
+							images: [img],
+							frames: event.item.frames,
+							animations: event.item.animations
+						}),
+						animation = new createjs.Sprite(spriteSheet);
 
-			animation.gotoAndPlay(event.item.initAnim);
-			animation.shadow = new createjs.Shadow("#454", 0, 5, 4);
+					animation.gotoAndPlay(event.item.initAnim);
+					animation.shadow = new createjs.Shadow("#454", 0, 5, 4);
 
-			animation.name = event.item.animName;
-			animation.x = event.item.frames.regX+(canvasBaseWidth-event.item.frames.width)/2;
-			animation.y = event.item.frames.regY+(canvasBaseHeight-event.item.frames.height);
+					animation.name = event.item.animName;
+					animation.x = event.item.frames.regX+(canvasBaseWidth-event.item.frames.width)/2;
+					animation.y = event.item.frames.regY+(canvasBaseHeight-event.item.frames.height);
 
-			animations[event.item.id] = animation;
-      		break;
+					animations[event.item.id] = animation;
+		      		break;
 
-      	case "background":
-      		images[event.item.id] = [];
-      		for(var i=0; i<=canvasBaseWidth/img.width;i++){
-      			images[event.item.id].push([]);
-      			for(var j=0; j<=canvasBaseHeight/img.height; j++){
-      				images[event.item.id][i].push(new createjs.Bitmap(img));
-      				images[event.item.id][i][j].x = i*img.width;
-      				images[event.item.id][i][j].y = j*img.height;
-      			}
-      		}
-      		break;
+		      	case "background":
+		      		images[event.item.id] = [];
+		      		for(var i=0; i<=canvasBaseWidth/img.width;i++){
+		      			images[event.item.id].push([]);
+		      			for(var j=0; j<=canvasBaseHeight/img.height; j++){
+		      				images[event.item.id][i].push(new createjs.Bitmap(img));
+		      				images[event.item.id][i][j].x = i*img.width;
+		      				images[event.item.id][i][j].y = j*img.height;
+		      			}
+		      		}
+		      		break;
 
-      	default:
-      		var bitmap =  new createjs.Bitmap(img);
-      		bitmap.x = 0;
-      		bitmap.y = 0;
+		      	default:
+		      		var bitmap =  new createjs.Bitmap(img);
+		      		bitmap.x = 0;
+		      		bitmap.y = 0;
 
-      		images[event.item.id] = bitmap;
-      		break;
-      }
+		      		images[event.item.id] = bitmap;
+		      		break;
+	      	}
 
-      totalLoaded++;
-      break;
+		}).error( function() {
+    		console.log("Unable to load resource: "+event.item.src);
+		});
+
+      	totalLoaded++;
+      	break;
   }
 }
 
