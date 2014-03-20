@@ -165,7 +165,7 @@ function updateWords(){
 	if(counter >= wordRate){
 		counter = 0;
 		var wordNum = parseInt(Math.random()*3000);
-		words[wordNum] = new createjs.Text("word"+wordNum, "20px Arial", "#ff7700");
+		words[wordNum] = new createjs.Text("あかさきゅ"+wordNum, "24px Arial", "#ff7700");
 		words[wordNum].x = parseInt(Math.random()*(canvasBaseWidth-200));
 		words[wordNum].y = -20;
 		words[wordNum].textBaseline = "alphabetic";
@@ -187,7 +187,8 @@ function shootFireball(){
 	fireballs[fireballs.length-1]["img"].y = animations["dragon"].y;
 	fireballs[fireballs.length-1]["target"] = key;
 
-	difX = fireballs[fireballs.length-1]["img"].x-words[key].x;
+	difX = (fireballs[fireballs.length-1]["img"].x+fireballs[fireballs.length-1]["img"].getBounds().width/2)
+			-(words[key].x+words[key].getBounds().width/2);
 	difY = fireballs[fireballs.length-1]["img"].y-words[key].y-wordSpeed*ticksToImpact;
 
 	fireballs[fireballs.length-1]["stepX"] = -difX/ticksToImpact;
@@ -196,7 +197,7 @@ function shootFireball(){
 }
 
 function updateFireballs(){
-	var difX, difY;
+	var difY;
 
 	counter2++;
 	if(counter2 >= wordRate){
@@ -208,13 +209,12 @@ function updateFireballs(){
 
 		if(words[fireballs[i]["target"]]){
 
-			difX = words[fireballs[i]["target"]].x - fireballs[i].img.x;
 			difY = words[fireballs[i]["target"]].y - fireballs[i].img.y;
 
 			fireballs[i].img.x += fireballs[i].stepX;
 			fireballs[i].img.y += fireballs[i].stepY;
 
-			if(Math.abs(difX) <= fireballSpeed && Math.abs(difY) <= fireballSpeed){
+			if(Math.abs(difY) <= fireballSpeed){
 				stage.removeChild(fireballs[i]["img"]);
 				stage.removeChild(words[fireballs[i]["target"]]);
 				delete words[fireballs[i]["target"]];
