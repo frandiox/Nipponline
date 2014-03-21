@@ -13,6 +13,8 @@ var socket = io.connect(),
 
 function init() {
 
+	window.onresize = resize;
+
 	totalLoaded = 0;
 
 	images = {};
@@ -20,8 +22,7 @@ function init() {
 	words = {};
 	fireballs = [];
 
-  	$("#stage").width(window.innerWidth);
-  	$("#stage").height(window.innerHeight);
+	resize();
 
 	stage = new createjs.Stage("stage");
 
@@ -42,6 +43,11 @@ function init() {
     queue.addEventListener("complete", handleComplete);
     queue.addEventListener("fileload", handleFileLoad);
     queue.loadManifest(manifest);
+}
+
+function resize(){
+	$("#stage").width(window.innerWidth);
+  	$("#stage").height(window.innerHeight);
 }
 
 function update(){
