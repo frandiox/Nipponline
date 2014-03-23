@@ -5,10 +5,11 @@ var socket = io.connect(),
 	images,
 	animations,
 	words,
+	currentTarget = null, currentPos = 0,
 	fireballs,
 	stage,
 	canvasBaseWidth = 1152, canvasBaseHeight = 812,
-	counter, wordRate = 60, wordSpeed = 4, fireballSpeed = 16, ticksToImpact = 45, counter2
+	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 22, ticksToImpact = 30
 	;
 
 function init() {
@@ -64,7 +65,6 @@ function handleComplete(event){
 
 	setTimeout(function(){
   		counter = 0;
-  		counter2 = 0;
   		createjs.Ticker.setFPS(30);
 		createjs.Ticker.addEventListener("tick",update);
 
@@ -77,8 +77,12 @@ function handleComplete(event){
         stage.addChild(animations["dragon"]);
         stage.update();
 
+        $("#input1").on("input",inputChange);
+        $("#input_div").css("display","block");
+
         $("#progress_bar_container").css("display","none");
         $("#stage").css("display","block");
+        $("#input1").focus();
 	}, 1000);
 
 }
@@ -183,9 +187,12 @@ function updateWords(){
 	}
 }
 
-function shootFireball(){
-	var difX, difY,
+function shootFireball(key){
+	var difX, difY;
+
+	if(!key){
 		key = pickRandomProperty(words);
+	}
 
 	fireballs.push({});
 	fireballs[fireballs.length-1]["img"] = images["fireball"].clone();
@@ -205,12 +212,6 @@ function shootFireball(){
 function updateFireballs(){
 	var difY;
 
-	counter2++;
-	if(counter2 >= wordRate){
-		counter2 = 0;
-		shootFireball();
-	}
-
 	for(var i=0; i<fireballs.length; i++){
 
 		if(words[fireballs[i]["target"]]){
@@ -222,8 +223,7 @@ function updateFireballs(){
 
 			if(Math.abs(difY) <= fireballSpeed){
 				stage.removeChild(fireballs[i]["img"]);
-				stage.removeChild(words[fireballs[i]["target"]]);
-				delete words[fireballs[i]["target"]];
+				wordHit(fireballs[i]["target"]);
 				fireballs.splice(i,1);
 				i--;
 			}
@@ -234,4 +234,49 @@ function updateFireballs(){
 			i--;
 		}
 	}
+}
+
+function wordHit(index){
+
+	if(words[index].text.length == 6){
+		stage.removeChild(words[index]);
+		delete words[index];
+	}
+	else{
+		words[index].text = words[index].text.slice(0,5)+words[index].text.slice(6,words[index].text.length);
+	}
+}
+
+function inputChange(){
+	var key;
+
+	if(key = checkValidity($("#input1").val().toLowerCase())){
+		if(currentTarget.length <= currentPos){
+			currentPos = 0;
+			currentTarget = null;
+		}
+		$("#input1").val("");
+		shootFireball(key);
+	}
+}
+
+function checkValidity(value){
+
+	if(currentTarget){
+		if(currentTarget[currentPos] == value){
+			currentPos++;
+			return currentTarget;
+		}
+	}
+	else{
+		for(var wordNum in words){
+			if(wordNum[currentPos] == value){
+				currentPos++;
+				currentTarget = wordNum;
+				return wordNum;
+			}
+		}
+	}
+
+	return null;
 }
