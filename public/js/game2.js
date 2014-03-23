@@ -170,12 +170,23 @@ function moveBackground(){
 	stage.update();
 }
 
+function destroyWord(key){
+
+	stage.removeChild(words[key]);
+	delete words[key];
+
+	if(currentTarget == key){
+		currentTarget = null;
+		currentPos = 0;
+	}
+}
+
 function updateWords(){
 	counter++;
 	if(counter >= wordRate){
 		counter = 0;
 		var wordNum = parseInt(Math.random()*3000);
-		words[wordNum] = new createjs.Text("あかさきゅ"+wordNum, "24px Arial", "#ff7700");
+		words[wordNum] = new createjs.Text("あかさきゅ"+wordNum, "24px Arial", "#7700ff");
 		words[wordNum].x = parseInt(Math.random()*(canvasBaseWidth-200));
 		words[wordNum].y = -20;
 		words[wordNum].textBaseline = "alphabetic";
@@ -184,6 +195,9 @@ function updateWords(){
 
 	for(var wordNum in words){
 		words[wordNum].y+=wordSpeed;
+		if(words[wordNum].y > canvasBaseHeight){
+			destroyWord(wordNum);
+		}
 	}
 }
 
@@ -236,14 +250,13 @@ function updateFireballs(){
 	}
 }
 
-function wordHit(index){
+function wordHit(key){
 
-	if(words[index].text.length == 6){
-		stage.removeChild(words[index]);
-		delete words[index];
+	if(words[key].text.length == 6){
+		destroyWord(key);
 	}
 	else{
-		words[index].text = words[index].text.slice(0,5)+words[index].text.slice(6,words[index].text.length);
+		words[key].text = words[key].text.slice(0,5)+words[key].text.slice(6,words[key].text.length);
 	}
 }
 
@@ -273,6 +286,7 @@ function checkValidity(value){
 			if(wordNum[currentPos] == value){
 				currentPos++;
 				currentTarget = wordNum;
+				words[wordNum].color = "#ff0000";
 				return wordNum;
 			}
 		}
