@@ -9,10 +9,11 @@ var socket = io.connect(),
 	fireballs,
 	stage,
 	canvasBaseWidth = 1152, canvasBaseHeight = 812,
-	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 22, ticksToImpact = 30
+	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 22, ticksToImpact = 30,
+	wordCount, wordCountText, bestWordCount, bestWordCountText
 	;
 
-function init() {
+function game2() {
 
 	window.onresize = resize;
 
@@ -26,6 +27,13 @@ function init() {
 	resize();
 
 	stage = new createjs.Stage("stage");
+
+	// Text
+	wordCountText = new createjs.Text("Streak:", "22px Play", "#ff7700"); wordCountText.x = 10; wordCountText.y = canvasBaseHeight-22; wordCountText.textBaseline = "alphabetic";
+	bestWordCountText = new createjs.Text("Best:", "22px Play", "#ff7700"); bestWordCountText.x = 140; bestWordCountText.y = canvasBaseHeight-22; bestWordCountText.textBaseline = "alphabetic";
+
+	// Internationalization
+  	i18n.init({ useCookie: false },setLngVariables);
 
 	manifest = [];
     manifest.push({src:"images/app2/dragon.png", id:"dragon", imageType:"spriteSheet",
@@ -75,6 +83,8 @@ function handleComplete(event){
         	}
         }
         stage.addChild(animations["dragon"]);
+        stage.addChild(wordCountText);
+        stage.addChild(bestWordCountText);
         stage.update();
 
         $("#input1").on("input",inputChange);
@@ -172,7 +182,7 @@ function moveBackground(){
 
 function destroyWord(key){
 
-	stage.removeChild(words[key]);
+	stage.removeChild(words[key].strObj);
 	delete words[key];
 
 	if(currentTarget == key){
@@ -185,17 +195,26 @@ function updateWords(){
 	counter++;
 	if(counter >= wordRate){
 		counter = 0;
+
 		var wordNum = parseInt(Math.random()*3000);
-		words[wordNum] = new createjs.Text("あかさきゅ"+wordNum, "24px Arial", "#7700ff");
-		words[wordNum].x = parseInt(Math.random()*(canvasBaseWidth-200));
-		words[wordNum].y = -20;
-		words[wordNum].textBaseline = "alphabetic";
-		stage.addChild(words[wordNum]);
+		var str = wordNum.toString();
+
+		while(words[wordNum]){
+			wordNum = wordNum+"-";
+		}
+
+		words[wordNum] = {};
+		words[wordNum].str = str;
+		words[wordNum].strObj = new createjs.Text("あかさきゅ"+str, "24px Arial", "#7700ff");
+		words[wordNum].strObj.x = parseInt(Math.random()*(canvasBaseWidth-200));
+		words[wordNum].strObj.y = -20;
+		words[wordNum].strObj.textBaseline = "alphabetic";
+		stage.addChild(words[wordNum].strObj);
 	}
 
 	for(var wordNum in words){
-		words[wordNum].y+=wordSpeed;
-		if(words[wordNum].y > canvasBaseHeight){
+		words[wordNum].strObj.y+=wordSpeed;
+		if(words[wordNum].strObj.y > canvasBaseHeight){
 			destroyWord(wordNum);
 		}
 	}
@@ -215,8 +234,8 @@ function shootFireball(key){
 	fireballs[fireballs.length-1]["target"] = key;
 
 	difX = (fireballs[fireballs.length-1]["img"].x+fireballs[fireballs.length-1]["img"].getBounds().width/2)
-			-(words[key].x+words[key].getBounds().width/2);
-	difY = fireballs[fireballs.length-1]["img"].y-words[key].y-wordSpeed*ticksToImpact;
+			-(words[key].strObj.x+words[key].strObj.getBounds().width/2);
+	difY = fireballs[fireballs.length-1]["img"].y-words[key].strObj.y-wordSpeed*ticksToImpact;
 
 	fireballs[fireballs.length-1]["stepX"] = -difX/ticksToImpact;
 	fireballs[fireballs.length-1]["stepY"] = -difY/ticksToImpact;
@@ -230,7 +249,7 @@ function updateFireballs(){
 
 		if(words[fireballs[i]["target"]]){
 
-			difY = words[fireballs[i]["target"]].y - fireballs[i].img.y;
+			difY = words[fireballs[i]["target"]].strObj.y - fireballs[i].img.y;
 
 			fireballs[i].img.x += fireballs[i].stepX;
 			fireballs[i].img.y += fireballs[i].stepY;
@@ -252,11 +271,16 @@ function updateFireballs(){
 
 function wordHit(key){
 
-	if(words[key].text.length == 6){
+	if(words[key].strObj.text.length == 6){
 		destroyWord(key);
+
+		updateWordCount(wordCount+1);
+		if(wordCount > bestWordCount){
+			updateBestWordCount(wordCount);
+		}
 	}
 	else{
-		words[key].text = words[key].text.slice(0,5)+words[key].text.slice(6,words[key].text.length);
+		words[key].strObj.text = words[key].strObj.text.slice(0,5)+words[key].strObj.text.slice(6,words[key].strObj.text.length);
 	}
 }
 
@@ -264,33 +288,48 @@ function inputChange(){
 	var key;
 
 	if(key = checkValidity($("#input1").val().toLowerCase())){
-		if(currentTarget.length <= currentPos){
+		if(words[currentTarget].str.length <= currentPos){
 			currentPos = 0;
 			currentTarget = null;
 		}
-		$("#input1").val("");
 		shootFireball(key);
+		$("#input1").val("");
 	}
 }
 
 function checkValidity(value){
 
 	if(currentTarget){
-		if(currentTarget[currentPos] == value){
+		if(words[currentTarget].str[currentPos] == value){
 			currentPos++;
 			return currentTarget;
 		}
 	}
 	else{
 		for(var wordNum in words){
-			if(wordNum[currentPos] == value){
+			if(words[wordNum].str[currentPos] == value){
 				currentPos++;
 				currentTarget = wordNum;
-				words[wordNum].color = "#ff0000";
+				words[wordNum].strObj.color = "#ff0000";
 				return wordNum;
 			}
 		}
 	}
 
 	return null;
+}
+
+function setLngVariables(){
+  updateWordCount(0);
+  updateBestWordCount(0);
+}
+
+function updateWordCount(value){
+	wordCount = value;
+ 	wordCountText.text = i18n.t("streak")+": "+value;
+}
+
+function updateBestWordCount(value){
+	bestWordCount = value;
+ 	bestWordCountText.text = i18n.t("best")+": "+value;
 }
