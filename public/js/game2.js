@@ -242,6 +242,15 @@ function createWord(){
 	words[wordNum].strObjHit.y = -20;
 	words[wordNum].strObjHit.textBaseline = "alphabetic";
 	stage.addChild(words[wordNum].strObjHit);
+
+	if(Math.random() < 0.5){
+		// The word aims to hit the player
+		var ticksNeeded = (canvasBaseHeight-104)/wordSpeed;
+		words[wordNum].stepX = (canvasBaseWidth/2-words[wordNum].strObj.getBounds().width/2-words[wordNum].strObj.x)/ticksNeeded;
+	}
+	else{
+		words[wordNum].stepX = 0;
+	}
 }
 
 function destroyWord(key){
@@ -265,6 +274,8 @@ function updateWords(){
 	}
 
 	for(var wordNum in words){
+		words[wordNum].strObj.x+=words[wordNum].stepX;
+		words[wordNum].strObjHit.x+=words[wordNum].stepX;
 		words[wordNum].strObj.y+=wordSpeed;
 		words[wordNum].strObjHit.y+=wordSpeed;
 		if(words[wordNum].strObj.y > canvasBaseHeight){
@@ -287,7 +298,7 @@ function shootFireball(key){
 	fireballs[fireballs.length-1]["target"] = key;
 
 	difX = (fireballs[fireballs.length-1]["img"].x+fireballs[fireballs.length-1]["img"].getBounds().width/2)
-			-(words[key].strObj.x+words[key].strObj.getBounds().width/2);
+			-(words[key].strObj.x+words[key].strObj.getBounds().width/2+words[key].stepX*ticksToImpact);
 	difY = fireballs[fireballs.length-1]["img"].y-words[key].strObj.y-wordSpeed*ticksToImpact;
 
 	fireballs[fireballs.length-1]["stepX"] = -difX/ticksToImpact;
@@ -360,12 +371,20 @@ function checkValidity(value){
 		}
 	}
 	else{
+		var bestTarget = null,
+			bestY = -100;
+
 		for(var wordNum in words){
-			if(words[wordNum].str[currentPos] == value){
-				currentPos++;
-				currentTarget = wordNum;
-				return wordNum;
+			if(words[wordNum].str[currentPos] == value && words[wordNum].strObj.y > bestY){
+				bestY = words[wordNum].strObj.y;
+				bestTarget = wordNum;
 			}
+		}
+
+		if(bestTarget){
+			currentPos++;
+			currentTarget = bestTarget;
+			return bestTarget;
 		}
 	}
 
