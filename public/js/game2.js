@@ -10,7 +10,9 @@ var socket = io.connect(),
 	stage,
 	canvasBaseWidth = 1152, canvasBaseHeight = 812,
 	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 22, ticksToImpact = 30,
-	wordCount, wordCountText, bestWordCount, bestWordCountText
+	wordCount, wordCountText, bestWordCount, bestWordCountText,
+	pause = false, kanjiOn = false,
+	wordSet = [{"writing":["と","も","だ","ち"],"romaji":["to","mo","da","chi"]}]
 	;
 
 function game2() {
@@ -60,9 +62,12 @@ function resize(){
 }
 
 function update(){
-	moveBackground();
-	updateWords();
-	updateFireballs();
+	if(!pause){
+		moveBackground();
+		updateWords();
+		updateFireballs();
+		stage.update();
+	}
 }
 
 function handleProgress(event){
@@ -176,13 +181,73 @@ function moveBackground(){
 			}
 		}
 	}
+}
 
-	stage.update();
+function parseTargetString(word){
+
+	var target = {};
+	target.str = [];
+	target.displayStr = [];
+
+	if(kanjiOn){
+	}
+	else{
+
+		for(var i=0; i<word.romaji.length; i++){
+			if(word.romaji[i] instanceof Array){
+				for(var j=0; j<word.romaji[i].length; j++){
+					target.str.push(word.romaji[i][j]);
+				}
+			}
+			else{
+				target.str.push(word.romaji[i]);
+			}
+		}
+
+		for(var i=0; i<word.writing.length; i++){
+			if(word.writing[i] instanceof Array){
+				for(var j=0; j<word.writing[i].length; j++){
+					target.displayStr.push(word.writing[i][j]);
+				}
+			}
+			else{
+				target.displayStr.push(word.writing[i]);
+			}
+		}
+	}
+
+	return target;
+}
+
+function createWord(){
+
+	var wordNum = parseInt(Math.random()*wordSet.length);
+	var target = parseTargetString(wordSet[wordNum]);
+
+	while(words[wordNum]){
+		wordNum = wordNum+"-";
+	}
+
+	words[wordNum] = {};
+	words[wordNum].str = target.str;
+	words[wordNum].displayStr = target.displayStr;
+	words[wordNum].displayStrHit = [];
+	words[wordNum].strObj = new createjs.Text(words[wordNum].displayStr.toString().replace(/,/g,""), "24px Arial", "#7700ff");
+	words[wordNum].strObj.x = parseInt(Math.random()*(canvasBaseWidth-200));
+	words[wordNum].strObj.y = -20;
+	words[wordNum].strObj.textBaseline = "alphabetic";
+	stage.addChild(words[wordNum].strObj);
+	words[wordNum].strObjHit = new createjs.Text(words[wordNum].displayStrHit.toString().replace(/,/g,""), "24px Arial", "#ff0000");
+	words[wordNum].strObjHit.x = words[wordNum].strObj.x;
+	words[wordNum].strObjHit.y = -20;
+	words[wordNum].strObjHit.textBaseline = "alphabetic";
+	stage.addChild(words[wordNum].strObjHit);
 }
 
 function destroyWord(key){
 
 	stage.removeChild(words[key].strObj);
+	stage.removeChild(words[key].strObjHit);
 	delete words[key];
 
 	if(currentTarget == key){
@@ -196,24 +261,12 @@ function updateWords(){
 	if(counter >= wordRate){
 		counter = 0;
 
-		var wordNum = parseInt(Math.random()*3000);
-		var str = wordNum.toString();
-
-		while(words[wordNum]){
-			wordNum = wordNum+"-";
-		}
-
-		words[wordNum] = {};
-		words[wordNum].str = str;
-		words[wordNum].strObj = new createjs.Text("あかさきゅ"+str, "24px Arial", "#7700ff");
-		words[wordNum].strObj.x = parseInt(Math.random()*(canvasBaseWidth-200));
-		words[wordNum].strObj.y = -20;
-		words[wordNum].strObj.textBaseline = "alphabetic";
-		stage.addChild(words[wordNum].strObj);
+		createWord();
 	}
 
 	for(var wordNum in words){
 		words[wordNum].strObj.y+=wordSpeed;
+		words[wordNum].strObjHit.y+=wordSpeed;
 		if(words[wordNum].strObj.y > canvasBaseHeight){
 			destroyWord(wordNum);
 		}
@@ -271,7 +324,7 @@ function updateFireballs(){
 
 function wordHit(key){
 
-	if(words[key].strObj.text.length == 6){
+	if(words[key].strObj.text.length-1 == words[key].strObjHit.text.length){
 		destroyWord(key);
 
 		updateWordCount(wordCount+1);
@@ -280,7 +333,8 @@ function wordHit(key){
 		}
 	}
 	else{
-		words[key].strObj.text = words[key].strObj.text.slice(0,5)+words[key].strObj.text.slice(6,words[key].strObj.text.length);
+		words[key].displayStrHit = words[key].displayStr.slice(0,words[key].displayStrHit.length+1);
+		words[key].strObjHit.text = words[key].displayStrHit.toString().replace(/,/g,"");
 	}
 }
 
@@ -310,7 +364,6 @@ function checkValidity(value){
 			if(words[wordNum].str[currentPos] == value){
 				currentPos++;
 				currentTarget = wordNum;
-				words[wordNum].strObj.color = "#ff0000";
 				return wordNum;
 			}
 		}
