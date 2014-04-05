@@ -7,7 +7,8 @@ var socket = io.connect(),
 	words,
 	currentTarget = null, currentPos = 0,
 	fireballs,
-	stage,
+	stage, wordsContainer, fireballsContainer,
+	hpContainer, hpBar, hpRemaining = 1.0,
 	canvasBaseWidth = 1152, canvasBaseHeight = 812,
 	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 22, ticksToImpact = 30,
 	wordCount, wordCountText, bestWordCount, bestWordCountText,
@@ -29,6 +30,17 @@ function game2() {
 	resize();
 
 	stage = new createjs.Stage("stage");
+	wordsContainer = new createjs.Container();
+	fireballsContainer = new createjs.Container();
+
+	// HP bar
+	hpContainer = new createjs.Container();
+	hpContainer.x = 928;
+	hpContainer.y = 20;
+	hpContainer.addChild(new createjs.Shape(new createjs.Graphics().beginFill("yellow").drawRect(0, 0, 204, 34)));
+	hpContainer.addChild(new createjs.Shape(new createjs.Graphics().beginFill("black").drawRect(2, 2, 200, 30)));
+	hpBar = new createjs.Shape(new createjs.Graphics().beginFill("orange").drawRect(2, 2, 200, 30));
+	hpContainer.addChild(hpBar);
 
 	// Text
 	wordCountText = new createjs.Text("Streak:", "22px Play", "#ff7700"); wordCountText.x = 10; wordCountText.y = canvasBaseHeight-22; wordCountText.textBaseline = "alphabetic";
@@ -87,9 +99,12 @@ function handleComplete(event){
         		stage.addChild(images["bg"][i][j]);
         	}
         }
+        stage.addChild(fireballsContainer);
+        stage.addChild(wordsContainer);
         stage.addChild(animations["dragon"]);
         stage.addChild(wordCountText);
         stage.addChild(bestWordCountText);
+        stage.addChild(hpContainer);
         stage.update();
 
         $("#input1").on("input",inputChange);
@@ -183,6 +198,13 @@ function moveBackground(){
 	}
 }
 
+function loseHP(amount){
+
+	hpRemaining = hpRemaining-amount > 0 ? hpRemaining-amount : 0;
+	hpBar.graphics.clear()
+	hpBar.graphics.beginFill("orange").drawRect(2, 2, 200*hpRemaining, 30);
+}
+
 function parseTargetString(word){
 
 	var target = {};
@@ -236,12 +258,12 @@ function createWord(){
 	words[wordNum].strObj.x = parseInt(Math.random()*(canvasBaseWidth-200));
 	words[wordNum].strObj.y = -20;
 	words[wordNum].strObj.textBaseline = "alphabetic";
-	stage.addChild(words[wordNum].strObj);
+	stage.getChildAt(stage.getChildIndex(wordsContainer)).addChild(words[wordNum].strObj);
 	words[wordNum].strObjHit = new createjs.Text(words[wordNum].displayStrHit.toString().replace(/,/g,""), "24px Arial", "#ff0000");
 	words[wordNum].strObjHit.x = words[wordNum].strObj.x;
 	words[wordNum].strObjHit.y = -20;
 	words[wordNum].strObjHit.textBaseline = "alphabetic";
-	stage.addChild(words[wordNum].strObjHit);
+	stage.getChildAt(stage.getChildIndex(wordsContainer)).addChild(words[wordNum].strObjHit);
 
 	if(Math.random() < 0.5){
 		// The word aims to hit the player
@@ -255,8 +277,8 @@ function createWord(){
 
 function destroyWord(key){
 
-	stage.removeChild(words[key].strObj);
-	stage.removeChild(words[key].strObjHit);
+	stage.getChildAt(stage.getChildIndex(wordsContainer)).removeChild(words[key].strObj);
+	stage.getChildAt(stage.getChildIndex(wordsContainer)).removeChild(words[key].strObjHit);
 	delete words[key];
 
 	if(currentTarget == key){
@@ -267,7 +289,7 @@ function destroyWord(key){
 
 function updateWords(){
 	counter++;
-	if(counter >= wordRate){
+	if(counter == wordRate){
 		counter = 0;
 
 		createWord();
@@ -303,7 +325,7 @@ function shootFireball(key){
 
 	fireballs[fireballs.length-1]["stepX"] = -difX/ticksToImpact;
 	fireballs[fireballs.length-1]["stepY"] = -difY/ticksToImpact;
-	stage.addChild(fireballs[fireballs.length-1]["img"]);
+	stage.getChildAt(stage.getChildIndex(fireballsContainer)).addChild(fireballs[fireballs.length-1]["img"]);
 }
 
 function updateFireballs(){
@@ -319,14 +341,14 @@ function updateFireballs(){
 			fireballs[i].img.y += fireballs[i].stepY;
 
 			if(Math.abs(difY) <= fireballSpeed){
-				stage.removeChild(fireballs[i]["img"]);
+				stage.getChildAt(stage.getChildIndex(fireballsContainer)).removeChild(fireballs[i]["img"]);
 				wordHit(fireballs[i]["target"]);
 				fireballs.splice(i,1);
 				i--;
 			}
 		}
 		else{
-			stage.removeChild(fireballs[i]["img"]);
+			stage.getChildAt(stage.getChildIndex(fireballsContainer)).removeChild(fireballs[i]["img"]);
 			fireballs.splice(i,1);
 			i--;
 		}
