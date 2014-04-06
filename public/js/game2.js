@@ -7,11 +7,13 @@ var socket = io.connect(),
 	words,
 	currentTarget = null, currentPos = 0,
 	fireballs,
+	difficulty = "easy",
 	stage, wordsContainer, fireballsContainer,
-	hpContainer, hpBar, hpRemaining = 1.0,
+	hpContainer, hpBar, hpRemaining = 1.0, hpPerFail, hpPerWord,
+	energyContainer, energyBar, energyRemaining = 0.0, energyPerWord,
 	canvasBaseWidth = 1152, canvasBaseHeight = 812,
 	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 22, ticksToImpact = 30,
-	wordCount, wordCountText, bestWordCount, bestWordCountText,
+	streakCount, streakCountText, bestStreakCount, bestStreakCountText, wordCount, wordCountText, bestWordCount, bestWordCountText,
 	pause = false, kanjiOn = false,
 	wordSet = [{"writing":["と","も","だ","ち"],"romaji":["to","mo","da","chi"]}]
 	;
@@ -33,17 +35,39 @@ function game2() {
 	wordsContainer = new createjs.Container();
 	fireballsContainer = new createjs.Container();
 
+	// Difficulty settings
+	switch(difficulty){
+		case "easy":
+			wordRate = 120;
+			wordSpeed = 2;
+			hpPerFail = -0.1;
+			hpPerWord = 0.05;
+			energyPerWord = 0.2;
+			break;
+	}
+
 	// HP bar
 	hpContainer = new createjs.Container();
 	hpContainer.x = 928;
 	hpContainer.y = 20;
 	hpContainer.addChild(new createjs.Shape(new createjs.Graphics().beginFill("yellow").drawRect(0, 0, 204, 34)));
 	hpContainer.addChild(new createjs.Shape(new createjs.Graphics().beginFill("black").drawRect(2, 2, 200, 30)));
-	hpBar = new createjs.Shape(new createjs.Graphics().beginFill("orange").drawRect(2, 2, 200, 30));
+	hpBar = new createjs.Shape(new createjs.Graphics().beginFill("orange").drawRect(2, 2, 200*hpRemaining, 30));
 	hpContainer.addChild(hpBar);
 
+	// Energy bar
+	energyContainer = new createjs.Container();
+	energyContainer.x = 20;
+	energyContainer.y = 20;
+	energyContainer.addChild(new createjs.Shape(new createjs.Graphics().beginFill("yellow").drawRect(0, 0, 204, 34)));
+	energyContainer.addChild(new createjs.Shape(new createjs.Graphics().beginFill("black").drawRect(2, 2, 200, 30)));
+	energyBar = new createjs.Shape(new createjs.Graphics().beginFill("pink").drawRect(2, 2, 200*energyRemaining, 30));
+	energyContainer.addChild(energyBar);
+
 	// Text
-	wordCountText = new createjs.Text("Streak:", "22px Play", "#ff7700"); wordCountText.x = 10; wordCountText.y = canvasBaseHeight-22; wordCountText.textBaseline = "alphabetic";
+	streakCountText = new createjs.Text("Streak:", "22px Play", "#ff7700"); streakCountText.x = 10; streakCountText.y = canvasBaseHeight-44; streakCountText.textBaseline = "alphabetic";
+	bestStreakCountText = new createjs.Text("Best:", "22px Play", "#ff7700"); bestStreakCountText.x = 10; bestStreakCountText.y = canvasBaseHeight-22; bestStreakCountText.textBaseline = "alphabetic";
+	wordCountText = new createjs.Text("Total:", "22px Play", "#ff7700"); wordCountText.x = 140; wordCountText.y = canvasBaseHeight-44; wordCountText.textBaseline = "alphabetic";
 	bestWordCountText = new createjs.Text("Best:", "22px Play", "#ff7700"); bestWordCountText.x = 140; bestWordCountText.y = canvasBaseHeight-22; bestWordCountText.textBaseline = "alphabetic";
 
 	// Internationalization
@@ -102,9 +126,12 @@ function handleComplete(event){
         stage.addChild(fireballsContainer);
         stage.addChild(wordsContainer);
         stage.addChild(animations["dragon"]);
+        stage.addChild(streakCountText);
+        stage.addChild(bestStreakCountText);
         stage.addChild(wordCountText);
         stage.addChild(bestWordCountText);
         stage.addChild(hpContainer);
+        stage.addChild(energyContainer);
         stage.update();
 
         $("#input1").on("input",inputChange);
@@ -198,11 +225,20 @@ function moveBackground(){
 	}
 }
 
-function loseHP(amount){
+function changeHP(amount){
 
-	hpRemaining = hpRemaining-amount > 0 ? hpRemaining-amount : 0;
+	hpRemaining += amount;
+	hpRemaining = hpRemaining < 0 ? 0 : hpRemaining > 1 ? 1 : hpRemaining;
 	hpBar.graphics.clear()
 	hpBar.graphics.beginFill("orange").drawRect(2, 2, 200*hpRemaining, 30);
+}
+
+function changeEnergy(amount){
+
+	energyRemaining += amount;
+	energyRemaining = energyRemaining < 0 ? 0 : energyRemaining > 1 ? 1 : energyRemaining;
+	energyBar.graphics.clear()
+	energyBar.graphics.beginFill("pink").drawRect(2, 2, 200*energyRemaining, 30);
 }
 
 function parseTargetString(word){
@@ -302,6 +338,8 @@ function updateWords(){
 		words[wordNum].strObjHit.y+=wordSpeed;
 		if(words[wordNum].strObj.y > canvasBaseHeight){
 			destroyWord(wordNum);
+			updateStreakCount(0);
+			changeHP(hpPerFail);
 		}
 	}
 }
@@ -359,10 +397,16 @@ function wordHit(key){
 
 	if(words[key].strObj.text.length-1 == words[key].strObjHit.text.length){
 		destroyWord(key);
+		changeHP(hpPerWord);
+		changeEnergy(energyPerWord);
 
 		updateWordCount(wordCount+1);
 		if(wordCount > bestWordCount){
 			updateBestWordCount(wordCount);
+		}
+		updateStreakCount(streakCount+1);
+		if(streakCount > bestStreakCount){
+			updateBestStreakCount(streakCount);
 		}
 	}
 	else{
@@ -414,13 +458,26 @@ function checkValidity(value){
 }
 
 function setLngVariables(){
-  updateWordCount(0);
-  updateBestWordCount(0);
+
+	updateStreakCount(0);
+  	updateBestStreakCount(0);
+  	updateWordCount(0);
+  	updateBestWordCount(0);
+}
+
+function updateStreakCount(value){
+	streakCount = value;
+ 	streakCountText.text = i18n.t("streak")+": "+value;
+}
+
+function updateBestStreakCount(value){
+	bestStreakCount = value;
+ 	bestStreakCountText.text = i18n.t("best")+": "+value;
 }
 
 function updateWordCount(value){
 	wordCount = value;
- 	wordCountText.text = i18n.t("streak")+": "+value;
+ 	wordCountText.text = i18n.t("wordCount")+": "+value;
 }
 
 function updateBestWordCount(value){
