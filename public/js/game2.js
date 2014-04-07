@@ -1,4 +1,5 @@
 var socket = io.connect(),
+	sessionAck = false,
 	manifest,
 	queue,
 	totalLoaded,
@@ -12,13 +13,20 @@ var socket = io.connect(),
 	hpContainer, hpBar, hpRemaining = 1.0, hpPerFail, hpPerWord,
 	energyContainer, energyBar, energyRemaining = 0.0, energyPerWord,
 	canvasBaseWidth = 1152, canvasBaseHeight = 812,
-	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 22, ticksToImpact = 30,
+	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 16,
 	streakCount, streakCountText, bestStreakCount, bestStreakCountText, wordCount, wordCountText, bestWordCount, bestWordCountText,
 	pause = false, kanjiOn = false,
-	wordSet = [{"writing":["と","も","だ","ち"],"romaji":["to","mo","da","chi"]}]
-	;
+	wordSet, wordSet2, refreshCounter = 0, refreshRequest = false;
+
+socket.on('acknowledge', function(ack){
+  sessionAck = ack;
+});
 
 function game2() {
+
+	socket.emit('getwords', 0, function (data) {
+		wordSet = data;
+	});
 
 	window.onresize = resize;
 
@@ -102,6 +110,7 @@ function update(){
 		moveBackground();
 		updateWords();
 		updateFireballs();
+		updateWordSets();
 		stage.update();
 	}
 }
@@ -321,6 +330,8 @@ function destroyWord(key){
 		currentTarget = null;
 		currentPos = 0;
 	}
+
+	refreshCounter++;
 }
 
 function updateWords(){
@@ -328,7 +339,9 @@ function updateWords(){
 	if(counter == wordRate){
 		counter = 0;
 
-		createWord();
+		if(wordSet){
+			createWord();
+		}
 	}
 
 	for(var wordNum in words){
@@ -345,7 +358,7 @@ function updateWords(){
 }
 
 function shootFireball(key){
-	var difX, difY;
+	var ticksToImpact = 30;
 
 	if(!key){
 		key = pickRandomProperty(words);
@@ -357,12 +370,13 @@ function shootFireball(key){
 	fireballs[fireballs.length-1]["img"].y = animations["dragon"].y;
 	fireballs[fireballs.length-1]["target"] = key;
 
-	difX = (fireballs[fireballs.length-1]["img"].x+fireballs[fireballs.length-1]["img"].getBounds().width/2)
-			-(words[key].strObj.x+words[key].strObj.getBounds().width/2+words[key].stepX*ticksToImpact);
-	difY = fireballs[fireballs.length-1]["img"].y-words[key].strObj.y-wordSpeed*ticksToImpact;
+	fireballs[fireballs.length-1]["stepY"] = fireballs[fireballs.length-1]["img"].y-words[key].strObj.y < 0 ? fireballSpeed : -fireballSpeed;
 
-	fireballs[fireballs.length-1]["stepX"] = -difX/ticksToImpact;
-	fireballs[fireballs.length-1]["stepY"] = -difY/ticksToImpact;
+	ticksToImpact = (fireballs[fireballs.length-1]["img"].y-words[key].strObj.y)/(wordSpeed+fireballSpeed);
+
+	fireballs[fireballs.length-1]["stepX"] = ticksToImpact == 0 ? 0 :
+		words[key].stepX+(words[key].strObj.x+words[key].strObj.getBounds().width/2-fireballs[fireballs.length-1]["img"].x-fireballs[fireballs.length-1]["img"].getBounds().width/2)/ticksToImpact;
+
 	stage.getChildAt(stage.getChildIndex(fireballsContainer)).addChild(fireballs[fireballs.length-1]["img"]);
 }
 
@@ -441,7 +455,7 @@ function checkValidity(value){
 			bestY = -100;
 
 		for(var wordNum in words){
-			if(words[wordNum].str[currentPos] == value && words[wordNum].strObj.y > bestY){
+			if(words[wordNum].str[currentPos] == value && words[wordNum].strObj.y > bestY && !words[wordNum].targeted){
 				bestY = words[wordNum].strObj.y;
 				bestTarget = wordNum;
 			}
@@ -450,11 +464,32 @@ function checkValidity(value){
 		if(bestTarget){
 			currentPos++;
 			currentTarget = bestTarget;
+			words[currentTarget].targeted = true;
 			return bestTarget;
 		}
 	}
 
 	return null;
+}
+
+function updateWordSets(){
+	if(refreshCounter > 20){
+
+		if(!refreshRequest){
+			refreshRequest = true;
+
+			socket.emit('getwords', 0, function (data) {
+				wordSet2 = data;
+			});
+		}
+
+		if(refreshCounter > 30){
+			wordSet = wordSet2;
+			wordSet2 = null;
+			refreshRequest = false;
+			refreshCounter = 0;
+		}
+	}
 }
 
 function setLngVariables(){

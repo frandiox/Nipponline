@@ -52,8 +52,6 @@ exports.configure = function(io){
 					}
 				}
 			});
-
-
 		});
 
 		// Estadisticas del juego 1
@@ -78,6 +76,17 @@ exports.configure = function(io){
 			}
 
 			return callback();
+		});
+
+		// Respuesta en caso de peticion de palabras (app2)
+		socket.on('getwords', function (data, callback){
+
+			var wordSet = [];
+			for(var i=0; i<50; i++){
+				wordSet[i] = {"writing":["と","も","だ","ち"],"romaji":["to","mo","da","chi"]};
+			}
+
+			callback(wordSet);
 		});
 
 	});
