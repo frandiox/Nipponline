@@ -13,7 +13,7 @@ var socket = io.connect(),
 	hpContainer, hpBar, hpRemaining = 1.0, hpPerFail, hpPerWord,
 	energyContainer, energyBar, energyRemaining = 0.0, energyPerWord,
 	canvasBaseWidth = 1152, canvasBaseHeight = 812,
-	counter, wordRate = 60, wordSpeed = 2, fireballSpeed = 16,
+	counter, wordRate = 60, wordSpeed = 1, fireballSpeed = 16,
 	streakCount, streakCountText, bestStreakCount, bestStreakCountText, wordCount, wordCountText, bestWordCount, bestWordCountText,
 	pause = false, kanjiOn = false,
 	wordSet, wordSet2, refreshCounter = 0, refreshRequest = false;
@@ -81,6 +81,7 @@ function game2() {
 	// Internationalization
   	i18n.init({ useCookie: false },setLngVariables);
 
+  	// Resources to be loaded
 	manifest = [];
     manifest.push({src:"images/app2/dragon.png", id:"dragon", imageType:"spriteSheet",
      	frames:{width: 176, height: 144, regX: 88, regY: 72},
@@ -92,6 +93,9 @@ function game2() {
 	});
 	manifest.push({src:"images/app2/bg.png", id:"bg", imageType:"background"});
 	manifest.push({src:"images/app2/fireball.png", id:"fireball"});
+	manifest.push({src:"images/app2/power1.gif", id:"power1"});
+	manifest.push({src:"images/app2/power2.gif", id:"power2"});
+	manifest.push({src:"images/app2/power3.gif", id:"power3"});
 
     queue = new createjs.LoadQueue();
     queue.addEventListener("progress", handleProgress);
@@ -141,6 +145,7 @@ function handleComplete(event){
         stage.addChild(bestWordCountText);
         stage.addChild(hpContainer);
         stage.addChild(energyContainer);
+        setPowerIcons();
         stage.update();
 
         $("#input1").on("input",inputChange);
@@ -215,6 +220,31 @@ function handleFileLoad(event){
 }
 
 function handleLoadComplete(event){
+}
+
+function setPowerIcons(){
+	images["power1"].x = canvasBaseWidth-360;
+	images["power1"].y = canvasBaseHeight-120;
+	images["power1"].addEventListener("click", function(event) {
+		power1();
+		$("#input1").focus();
+	});
+	images["power2"].x = canvasBaseWidth-240;
+	images["power2"].y = canvasBaseHeight-120;
+	images["power2"].addEventListener("click", function(event) {
+		power2();
+		$("#input1").focus();
+	});
+	images["power3"].x = canvasBaseWidth-120;
+	images["power3"].y = canvasBaseHeight-120;
+	images["power3"].addEventListener("click", function(event) {
+		power3();
+		$("#input1").focus();
+	});
+
+	stage.addChild(images["power1"]);
+	stage.addChild(images["power2"]);
+	stage.addChild(images["power3"]);
 }
 
 
@@ -299,6 +329,7 @@ function createWord(){
 	words[wordNum].str = target.str;
 	words[wordNum].displayStr = target.displayStr;
 	words[wordNum].displayStrHit = [];
+	words[wordNum].stepY = wordSpeed;
 	words[wordNum].strObj = new createjs.Text(words[wordNum].displayStr.toString().replace(/,/g,""), "24px Arial", "#7700ff");
 	words[wordNum].strObj.x = parseInt(Math.random()*(canvasBaseWidth-200));
 	words[wordNum].strObj.y = -20;
@@ -347,8 +378,8 @@ function updateWords(){
 	for(var wordNum in words){
 		words[wordNum].strObj.x+=words[wordNum].stepX;
 		words[wordNum].strObjHit.x+=words[wordNum].stepX;
-		words[wordNum].strObj.y+=wordSpeed;
-		words[wordNum].strObjHit.y+=wordSpeed;
+		words[wordNum].strObj.y+=words[wordNum].stepY;
+		words[wordNum].strObjHit.y+=words[wordNum].stepY;
 		if(words[wordNum].strObj.y > canvasBaseHeight){
 			destroyWord(wordNum);
 			updateStreakCount(0);
@@ -357,8 +388,18 @@ function updateWords(){
 	}
 }
 
-function shootFireball(key){
+function setFireballSpeed(fireball){
 	var ticksToImpact = 30;
+
+	fireball["stepY"] = fireball["img"].y-words[fireball["target"]].strObj.y < 0 ? fireballSpeed : -fireballSpeed;
+
+	ticksToImpact = (fireball["img"].y-words[fireball["target"]].strObj.y)/(words[fireball["target"]].stepY+fireballSpeed);
+
+	fireball["stepX"] = ticksToImpact == 0 ? 0 :
+	words[fireball["target"]].stepX+(words[fireball["target"]].strObj.x+words[fireball["target"]].strObj.getBounds().width/2-fireball["img"].x-fireball["img"].getBounds().width/2)/ticksToImpact;
+}
+
+function shootFireball(key){
 
 	if(!key){
 		key = pickRandomProperty(words);
@@ -370,12 +411,7 @@ function shootFireball(key){
 	fireballs[fireballs.length-1]["img"].y = animations["dragon"].y;
 	fireballs[fireballs.length-1]["target"] = key;
 
-	fireballs[fireballs.length-1]["stepY"] = fireballs[fireballs.length-1]["img"].y-words[key].strObj.y < 0 ? fireballSpeed : -fireballSpeed;
-
-	ticksToImpact = (fireballs[fireballs.length-1]["img"].y-words[key].strObj.y)/(wordSpeed+fireballSpeed);
-
-	fireballs[fireballs.length-1]["stepX"] = ticksToImpact == 0 ? 0 :
-		words[key].stepX+(words[key].strObj.x+words[key].strObj.getBounds().width/2-fireballs[fireballs.length-1]["img"].x-fireballs[fireballs.length-1]["img"].getBounds().width/2)/ticksToImpact;
+	setFireballSpeed(fireballs[fireballs.length-1]);
 
 	stage.getChildAt(stage.getChildIndex(fireballsContainer)).addChild(fireballs[fireballs.length-1]["img"]);
 }
@@ -489,6 +525,47 @@ function updateWordSets(){
 			refreshRequest = false;
 			refreshCounter = 0;
 		}
+	}
+}
+
+function power1(){
+
+	if(energyRemaining >= 0.5){
+		for(var wordNum in words){
+			words[wordNum].stepY /= 2;
+			words[wordNum].stepX /= 2;
+			for(var i=0; i<fireballs.length; i++){
+				if(fireballs[i]["target"] == wordNum){
+					setFireballSpeed(fireballs[i]);
+				}
+			}
+		}
+		changeEnergy(-0.5);
+	}
+}
+
+function power2(){
+
+	changeHP(0.5*energyRemaining);
+	changeEnergy(-energyRemaining);
+}
+
+function power3(){
+
+	if(energyRemaining == 1.0){
+		for(var wordNum in words){
+			destroyWord(wordNum);
+
+			updateWordCount(wordCount+1);
+			if(wordCount > bestWordCount){
+				updateBestWordCount(wordCount);
+			}
+			updateStreakCount(streakCount+1);
+			if(streakCount > bestStreakCount){
+				updateBestStreakCount(streakCount);
+			}
+		}
+		changeEnergy(-1);
 	}
 }
 
