@@ -3,7 +3,7 @@ var socket = io.connect(),
     manifest,
     queue,
     totalLoaded,
-    images,
+    images, background,
     currentImg,
     stage,
     tweening,
@@ -11,6 +11,7 @@ var socket = io.connect(),
     kanaRoute = "images/kana/",
     kana = [{"name":"a","ruta":"a"},{"name":"o","ruta":"o-1"},{"name":"o","ruta":"o-2"},{"name":"ka","ruta":"ka"},{"name":"ma","ruta":"ma"},{"name":"ta","ruta":"ta"}],
     visualize = 2,
+    canvasBaseWidth = 1152, canvasBaseHeight = 812,
     streak, best, streakText, bestText,
     stats = new Game1Stats(), counter = 0, timeIni;
 
@@ -19,12 +20,17 @@ socket.on('acknowledge', function(ack){
 });
 
 function game1(){
+
+  window.onresize = resize;
+  resize();
+
   socket.emit('getsyllables', 0, function (data) {
     kana = data[0];
 
     updateBest(data[1]);
 
     manifest = [];
+    manifest.push({src:"images/app1/bg.gif", id:"bg", imageType:"background"})
     for(var i=0; i<kana.length; i++){
       manifest.push({src:kanaRoute+"hiragana/"+kana[i].route+".gif", id:kana[i].route});
     }
@@ -42,8 +48,8 @@ function game1(){
   });
 
   // Text
-  streakText = new createjs.Text("", "20px Play", "#ff7700"); streakText.x = 280; streakText.y = 20; streakText.textBaseline = "alphabetic";
-  bestText = new createjs.Text("", "20px Play", "#ff7700"); bestText.x = 280; bestText.y = 40; bestText.textBaseline = "alphabetic";
+  streakText = new createjs.Text("", "22px Play", "#ff7700"); streakText.x = 20; streakText.y = 20; streakText.textBaseline = "alphabetic";
+  bestText = new createjs.Text("", "22px Play", "#ff7700"); bestText.x = 20; bestText.y = 44; bestText.textBaseline = "alphabetic";
 
   // Internationalization
   i18n.init({ useCookie: false },setLngVariables);
@@ -55,16 +61,13 @@ function game1(){
 
   stage = new createjs.Stage(document.getElementById("stage"));
 
-  // Progress bar
-  progressbg = new createjs.Shape();
-  progressbg.graphics.beginFill("#000000").drawRect(37, 172, 300, 30);
-  stage.addChild(progressbg);
-  progress = new createjs.Shape();
-  progress.graphics.beginFill("#ff0000").drawRect(37, 172, 0, 30);
-  stage.addChild(progress);
-
   createjs.Ticker.setFPS(30);
   createjs.Ticker.addEventListener("tick",stage);
+}
+
+function resize(){
+  $("#stage").width(window.innerWidth);
+  $("#stage").height(window.innerHeight);
 }
 
 function handleProgress(event){
@@ -75,6 +78,7 @@ function handleComplete(event){
 
   setTimeout(function(){
         stage.removeAllChildren();
+        stage.addChild(background);
         stage.addChild(streakText);
         stage.addChild(bestText);
         stage.addChild(images[0]);
@@ -83,9 +87,7 @@ function handleComplete(event){
         $("#input1").on("input",inputChange);
         $("#select1").change(selectChange);
 
-        $("#boton1").css("display","block");
-        $("#input1").css("display","block");
-        $("#select1").css("display","block");
+        $("#input_div").css("display","block");
 
         $("#progress_bar_container").css("display","none");
         $("#stage").css("display","block");
@@ -105,11 +107,18 @@ function handleFileLoad(event){
       var img = new Image();
       img.src = event.item.src;
 
-      images[totalLoaded] = new createjs.Bitmap(img);
-      images[totalLoaded].scaleX=0.75;
-      images[totalLoaded].scaleY=0.75;
+      if(event.item.imageType == "background"){
+        background = new createjs.Bitmap(img);
+        background.x = 0;
+        background.y = 0;
+      }
+      else{
+        images[totalLoaded] = new createjs.Bitmap(img);
+        images[totalLoaded].x = (canvasBaseWidth-img.width)/2;
+        images[totalLoaded].y = (canvasBaseHeight-img.height)/2;
 
-      totalLoaded++;
+        totalLoaded++;
+      }
       break;
   }
 }
@@ -152,12 +161,12 @@ function nextImg(){
     var nextImg = Math.floor(visualize === 2 ? Math.random()*2*kana.length : visualize*kana.length+Math.random()*kana.length);
     currentImg = currentImg === nextImg ? visualize === 2 ? (nextImg+1)%(kana.length*2) : visualize*kana.length+((nextImg+1)%kana.length) : nextImg;
 
-    images[currentImg].x = 375;
+    images[currentImg].x = canvasBaseWidth;
     images[currentImg].scaleX = 0.25;
     images[currentImg].scaleY = 0.25;
     stage.addChild(images[currentImg]);
 
-    createjs.Tween.get(images[currentImg]).to({x:0, scaleX:0.75, scaleY:0.75}, 1000, createjs.Ease.linear).call(finishShift);
+    createjs.Tween.get(images[currentImg]).to({x:(canvasBaseWidth-images[currentImg].getBounds().width)/2, scaleX:1, scaleY:1}, 1000, createjs.Ease.linear).call(finishShift);
 
     stage.update();
   }

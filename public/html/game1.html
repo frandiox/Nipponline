@@ -17,19 +17,21 @@
         <script src="js/game1.js"></script>
 
     </head>
-    <body onload="game1();">
-        <div>
-            <div id="progress_bar_container" class="progress-bar blue stripes">
-                <span id="progress_bar1" style="width: 0%"></span>
+    <body onload="game1();" style="margin:0;padding:0">
+        <div style="margin:0;">
+            <div id="progress_bar_container" class="progress-bar blue stripes" style="margin:5px">
+                <span id="progress_bar1" style="width:0%;"></span>
             </div>
-            <canvas id="stage" width="375" height="375" style="display:none"></canvas>
-            <button id="boton1" type="button" onclick="skip();" style="display: none">next</button>
-            <input id="input1" type="text" style="display: none"></input>
-            <select id="select1" style="display: none">
-                <option value="Hiragana">Hiragana</option>
-                <option value="Katakana">Katakana</option>
-                <option id="both" value="Both" selected="selected">Ambos</option>
-            </select>
+            <div id="input_div" style="z-index: 1; position: absolute; bottom:0; left:50%; margin-left:-100px; display:none;">
+                <button id="boton1" type="button" onclick="skip();" style="display: inline">next</button>
+                <input id="input1" type="text" style="display: inline"></input>
+                <select id="select1" style="display: inline">
+                    <option value="Hiragana">Hiragana</option>
+                    <option value="Katakana">Katakana</option>
+                    <option id="both" value="Both" selected="selected">Ambos</option>
+                </select>
+            </div>
+            <canvas id="stage" width="1152" height="812" style="display:none"></canvas>
         </div>
     </body>
 </html>
