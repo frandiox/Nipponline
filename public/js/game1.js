@@ -89,7 +89,7 @@ function handleComplete(event){
 
         $("#input_div").css("display","block");
 
-        $("#progress_bar_container").css("display","none");
+        $("#loading_screen_container").css("display","none");
         $("#stage").css("display","block");
         timeIni = new Date().getTime();
         $("#input1").focus();
@@ -106,19 +106,24 @@ function handleFileLoad(event){
       //image loaded
       var img = new Image();
       img.src = event.item.src;
+      $(img).load( function() {
 
-      if(event.item.imageType == "background"){
-        background = new createjs.Bitmap(img);
-        background.x = 0;
-        background.y = 0;
-      }
-      else{
-        images[totalLoaded] = new createjs.Bitmap(img);
-        images[totalLoaded].x = (canvasBaseWidth-img.width)/2;
-        images[totalLoaded].y = (canvasBaseHeight-img.height)/2;
+        if(event.item.imageType == "background"){
+          background = new createjs.Bitmap(img);
+          background.x = 0;
+          background.y = 0;
+        }
+        else{
+          images[totalLoaded] = new createjs.Bitmap(img);
+          images[totalLoaded].x = (canvasBaseWidth-img.width)/2;
+          images[totalLoaded].y = (canvasBaseHeight-img.height)/2;
+          totalLoaded++;
+        }
 
-        totalLoaded++;
-      }
+      }).error( function() {
+        console.log("Unable to load resource: "+event.item.src);
+      });
+
       break;
   }
 }

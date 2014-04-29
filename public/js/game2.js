@@ -83,19 +83,29 @@ function game2() {
 
   	// Resources to be loaded
 	manifest = [];
-    manifest.push({src:"images/app2/dragon.png", id:"dragon", imageType:"spriteSheet",
-     	frames:{width: 176, height: 144, regX: 88, regY: 72},
+    manifest.push({src:"images/app2/fox.png", id:"fox", imageType:"spriteSheet",
+     	frames:{width: 283, height: 250, regX: 283/2, regY: 250/2},
      	animations: {
-			attack: [0, 2, "attack"]
+			move: [0, 3, "move"]
 		},
-		initAnim: "attack",
-		animName: "monster1"
+		initAnim: "move",
+		animName: "foxAnim"
+	});
+	manifest.push({src:"images/app2/fireball.png", id:"fireball", imageType:"spriteSheet",
+     	frames:{width: 48, height: 44},
+     	animations: {
+			move: [0, 3, "idle"]
+		},
+		initAnim: "idle",
+		animName: "fireballAnim"
 	});
 	manifest.push({src:"images/app2/bg.png", id:"bg", imageType:"background"});
-	manifest.push({src:"images/app2/fireball.png", id:"fireball"});
 	manifest.push({src:"images/app2/power1.gif", id:"power1"});
 	manifest.push({src:"images/app2/power2.gif", id:"power2"});
 	manifest.push({src:"images/app2/power3.gif", id:"power3"});
+	manifest.push({src:"images/app2/power1_disabled.gif", id:"power1Disabled"});
+	manifest.push({src:"images/app2/power2_disabled.gif", id:"power2Disabled"});
+	manifest.push({src:"images/app2/power3_disabled.gif", id:"power3Disabled"});
 
     queue = new createjs.LoadQueue();
     queue.addEventListener("progress", handleProgress);
@@ -138,7 +148,7 @@ function handleComplete(event){
         }
         stage.addChild(fireballsContainer);
         stage.addChild(wordsContainer);
-        stage.addChild(animations["dragon"]);
+        stage.addChild(animations["fox"]);
         stage.addChild(streakCountText);
         stage.addChild(bestStreakCountText);
         stage.addChild(wordCountText);
@@ -151,7 +161,7 @@ function handleComplete(event){
         $("#input1").on("input",inputChange);
         $("#input_div").css("display","block");
 
-        $("#progress_bar_container").css("display","none");
+        $("#loading_screen_container").css("display","none");
         $("#stage").css("display","block");
         $("#input1").focus();
 	}, 1000);
@@ -223,6 +233,7 @@ function handleLoadComplete(event){
 }
 
 function setPowerIcons(){
+	// Powers enabled
 	images["power1"].x = canvasBaseWidth-360;
 	images["power1"].y = canvasBaseHeight-120;
 	images["power1"].addEventListener("click", function(event) {
@@ -242,9 +253,36 @@ function setPowerIcons(){
 		$("#input1").focus();
 	});
 
+	// Powers disabled
+	images["power1Disabled"].x = canvasBaseWidth-360;
+	images["power1Disabled"].y = canvasBaseHeight-120;
+	images["power1Disabled"].addEventListener("click", function(event) {
+		$("#input1").focus();
+	});
+
+	images["power2Disabled"].x = canvasBaseWidth-240;
+	images["power2Disabled"].y = canvasBaseHeight-120;
+	images["power2Disabled"].addEventListener("click", function(event) {
+		$("#input1").focus();
+	});
+
+	images["power3Disabled"].x = canvasBaseWidth-120;
+	images["power3Disabled"].y = canvasBaseHeight-120;
+	images["power3Disabled"].addEventListener("click", function(event) {
+		$("#input1").focus();
+	});
+
+	// Initial visibility
+	images["power1"].visible = false;
+	images["power3"].visible = false;
+	images["power2Disabled"].visible = false;
+
 	stage.addChild(images["power1"]);
 	stage.addChild(images["power2"]);
 	stage.addChild(images["power3"]);
+	stage.addChild(images["power1Disabled"]);
+	stage.addChild(images["power2Disabled"]);
+	stage.addChild(images["power3Disabled"]);
 }
 
 
@@ -273,11 +311,29 @@ function changeHP(amount){
 }
 
 function changeEnergy(amount){
+	var startEnergy = energyRemaining;
 
 	energyRemaining += amount;
 	energyRemaining = energyRemaining < 0 ? 0 : energyRemaining > 1 ? 1 : energyRemaining;
 	energyBar.graphics.clear()
 	energyBar.graphics.beginFill("pink").drawRect(2, 2, 200*energyRemaining, 30);
+
+	if(startEnergy < 0.5 && energyRemaining >= 0.5){
+		images["power1"].visible = true;
+		images["power1Disabled"].visible = false;
+	}
+	if(startEnergy >= 0.5 && energyRemaining < 0.5){
+		images["power1"].visible = false;
+		images["power1Disabled"].visible = true;
+	}
+	if(startEnergy < 1.0 && energyRemaining >= 1.0){
+		images["power3"].visible = true;
+		images["power3Disabled"].visible = false;
+	}
+	if(startEnergy >= 1.0 && energyRemaining < 1.0){
+		images["power3"].visible = false;
+		images["power3Disabled"].visible = true;
+	}
 }
 
 function parseTargetString(word){
@@ -330,15 +386,19 @@ function createWord(){
 	words[wordNum].displayStr = target.displayStr;
 	words[wordNum].displayStrHit = [];
 	words[wordNum].stepY = wordSpeed;
-	words[wordNum].strObj = new createjs.Text(words[wordNum].displayStr.toString().replace(/,/g,""), "24px Arial", "#7700ff");
+	words[wordNum].strObj = new createjs.Text(words[wordNum].displayStr.toString().replace(/,/g,""), "24px Arial", "#ffffff");
 	words[wordNum].strObj.x = parseInt(Math.random()*(canvasBaseWidth-200));
 	words[wordNum].strObj.y = -20;
 	words[wordNum].strObj.textBaseline = "alphabetic";
-	stage.getChildAt(stage.getChildIndex(wordsContainer)).addChild(words[wordNum].strObj);
+	words[wordNum].strObj.outline = 3;
+
 	words[wordNum].strObjHit = new createjs.Text(words[wordNum].displayStrHit.toString().replace(/,/g,""), "24px Arial", "#ff0000");
 	words[wordNum].strObjHit.x = words[wordNum].strObj.x;
 	words[wordNum].strObjHit.y = -20;
 	words[wordNum].strObjHit.textBaseline = "alphabetic";
+	words[wordNum].strObjHit.outline = 3;
+
+	stage.getChildAt(stage.getChildIndex(wordsContainer)).addChild(words[wordNum].strObj);
 	stage.getChildAt(stage.getChildIndex(wordsContainer)).addChild(words[wordNum].strObjHit);
 
 	if(Math.random() < 0.5){
@@ -406,9 +466,9 @@ function shootFireball(key){
 	}
 
 	fireballs.push({});
-	fireballs[fireballs.length-1]["img"] = images["fireball"].clone();
-	fireballs[fireballs.length-1]["img"].x = animations["dragon"].x;
-	fireballs[fireballs.length-1]["img"].y = animations["dragon"].y;
+	fireballs[fireballs.length-1]["img"] = animations["fireball"].clone();
+	fireballs[fireballs.length-1]["img"].x = animations["fox"].x;
+	fireballs[fireballs.length-1]["img"].y = animations["fox"].y;
 	fireballs[fireballs.length-1]["target"] = key;
 
 	setFireballSpeed(fireballs[fireballs.length-1]);
