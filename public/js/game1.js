@@ -3,7 +3,7 @@ var socket = io.connect(),
     manifest,
     queue,
     totalLoaded,
-    images, background,
+    images, kanaImages, background,
     currentImg,
     stage,
     tweening,
@@ -11,6 +11,7 @@ var socket = io.connect(),
     kanaRoute = "images/kana/",
     kana = [{"name":"a","ruta":"a"},{"name":"o","ruta":"o-1"},{"name":"o","ruta":"o-2"},{"name":"ka","ruta":"ka"},{"name":"ma","ruta":"ma"},{"name":"ta","ruta":"ta"}],
     visualize = 2,
+    kanaScaling = 0.4,
     canvasBaseWidth = 1152, canvasBaseHeight = 812,
     streak, best, streakText, bestText,
     stats = new Game1Stats(), counter = 0, timeIni;
@@ -30,14 +31,14 @@ function game1(){
     updateBest(data[1]);
 
     manifest = [];
-    manifest.push({src:"images/app1/bg.gif", id:"bg", imageType:"background"})
+    manifest.push({src:"images/app1/bg.gif", id:"bg", imageType:"background"});
+    manifest.push({src:"images/app1/canvas.png", id:"canvas"});
     for(var i=0; i<kana.length; i++){
-      manifest.push({src:kanaRoute+"hiragana/"+kana[i].route+".gif", id:kana[i].route});
+      manifest.push({src:kanaRoute+"hiragana/"+kana[i].route+".gif", id:kana[i].route, imageType:"kana"});
     }
     for(var i=0; i<kana.length; i++){
-      manifest.push({src:kanaRoute+"katakana/"+kana[i].route+".gif", id:kana[i].route});
+      manifest.push({src:kanaRoute+"katakana/"+kana[i].route+".gif", id:kana[i].route, imageType:"kana"});
     }
-
 
     queue = new createjs.LoadQueue();
     queue.addEventListener("progress", handleProgress);
@@ -57,7 +58,8 @@ function game1(){
   tweening = false;
   currentImg = 0;
 	totalLoaded = 0;
-	images = [];
+  images = {};
+	kanaImages = [];
 
   stage = new createjs.Stage(document.getElementById("stage"));
 
@@ -81,7 +83,13 @@ function handleComplete(event){
         stage.addChild(background);
         stage.addChild(streakText);
         stage.addChild(bestText);
-        stage.addChild(images[0]);
+
+        images["canvas"].scaleY = 1.5;
+        images["canvas"].x = (canvasBaseWidth-images["canvas"].getBounds().width*images["canvas"].scaleX)/2;
+        images["canvas"].y = (canvasBaseHeight-images["canvas"].getBounds().height*images["canvas"].scaleY)/2;
+        stage.addChild(images["canvas"]);
+
+        stage.addChild(kanaImages[0]);
         stage.update();
 
         $("#input1").on("input",inputChange);
@@ -108,16 +116,29 @@ function handleFileLoad(event){
       img.src = event.item.src;
       $(img).load( function() {
 
-        if(event.item.imageType == "background"){
-          background = new createjs.Bitmap(img);
-          background.x = 0;
-          background.y = 0;
-        }
-        else{
-          images[totalLoaded] = new createjs.Bitmap(img);
-          images[totalLoaded].x = (canvasBaseWidth-img.width)/2;
-          images[totalLoaded].y = (canvasBaseHeight-img.height)/2;
-          totalLoaded++;
+        switch(event.item.imageType){
+          case "background":
+            background = new createjs.Bitmap(img);
+            background.x = 0;
+            background.y = 0;
+            break;
+
+          case "kana":
+            kanaImages[totalLoaded] = new createjs.Bitmap(img);
+            kanaImages[totalLoaded].scaleX = kanaScaling;
+            kanaImages[totalLoaded].scaleY = kanaScaling;
+            kanaImages[totalLoaded].x = (canvasBaseWidth-img.width*kanaScaling)/2;
+            kanaImages[totalLoaded].y = (canvasBaseHeight-img.height*kanaScaling)/2;
+            totalLoaded++;
+            break;
+
+          default:
+            var bitmap =  new createjs.Bitmap(img);
+            bitmap.x = 0;
+            bitmap.y = 0;
+
+            images[event.item.id] = bitmap;
+            break;
         }
 
       }).error( function() {
@@ -161,17 +182,17 @@ function nextImg(){
     tweening = true;
     $("#input1").attr("disabled",true);
 
-    createjs.Tween.get(images[currentImg]).to({x:-images[currentImg].getBounds().width, scaleX:0.25, scaleY:0.25}, 1000);
+    createjs.Tween.get(kanaImages[currentImg]).to({x:-kanaImages[currentImg].getBounds().width*0.1, scaleX:0.1, scaleY:0.1}, 1000);
 
     var nextImg = Math.floor(visualize === 2 ? Math.random()*2*kana.length : visualize*kana.length+Math.random()*kana.length);
     currentImg = currentImg === nextImg ? visualize === 2 ? (nextImg+1)%(kana.length*2) : visualize*kana.length+((nextImg+1)%kana.length) : nextImg;
 
-    images[currentImg].x = canvasBaseWidth;
-    images[currentImg].scaleX = 0.25;
-    images[currentImg].scaleY = 0.25;
-    stage.addChild(images[currentImg]);
+    kanaImages[currentImg].x = canvasBaseWidth;
+    kanaImages[currentImg].scaleX = 0.1;
+    kanaImages[currentImg].scaleY = 0.1;
+    stage.addChild(kanaImages[currentImg]);
 
-    createjs.Tween.get(images[currentImg]).to({x:(canvasBaseWidth-images[currentImg].getBounds().width)/2, scaleX:1, scaleY:1}, 1000, createjs.Ease.linear).call(finishShift);
+    createjs.Tween.get(kanaImages[currentImg]).to({x:(canvasBaseWidth-kanaImages[currentImg].getBounds().width*kanaScaling)/2, scaleX:kanaScaling, scaleY:kanaScaling}, 1000, createjs.Ease.linear).call(finishShift);
 
     stage.update();
   }
