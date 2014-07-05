@@ -31,3 +31,5 @@ node_modules
 bower_components
 build
 client
+config.json
+sftp-config.json

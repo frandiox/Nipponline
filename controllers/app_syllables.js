@@ -7,7 +7,7 @@ var models_syllables = require('../app/models/syllables'),
 
 
 exports.index = function(req, res){
-    fs.readFile('./public/html/juego1.html', function (err, html) {
+    fs.readFile('./public/html/game1.html', function (err, html) {
         if (err) {
             throw err;
         }
@@ -59,7 +59,7 @@ exports.getGame1Stats = function(uid, callback){
             return callback(err);
         }
 
-        if(!doc || doc == 'null'){
+        if(typeof doc === 'undefined' || !doc || doc == 'null' || typeof doc.toJSON() === 'undefined'){
             module.exports.setDefaultStats(uid, function(){});
             return callback(null,{'best':0,'hiragana':{},'katakana':{}});
         }

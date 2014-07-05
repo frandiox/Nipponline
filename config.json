@@ -1,6 +1,7 @@
 {
   "name": "Nipponline",
-  "sessionSecret": "piruleta",
+  "sessionSecret": "your-secret",
+  "domain": "your-domain",
   "db": {
 	"lang":{
 		"user": "",
@@ -14,7 +15,7 @@
 		"pass": "",
 		"location": "localhost",
 		"port": "27017",
-		"name": "Nipponline"
+		"name": "nodebb"
 	}
   }
 }

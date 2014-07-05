@@ -3,7 +3,7 @@ var socket = io.connect(),
     manifest,
     queue,
     totalLoaded,
-    images,
+    images, kanaImages, background,
     currentImg,
     stage,
     tweening,
@@ -11,6 +11,8 @@ var socket = io.connect(),
     kanaRoute = "images/kana/",
     kana = [{"name":"a","ruta":"a"},{"name":"o","ruta":"o-1"},{"name":"o","ruta":"o-2"},{"name":"ka","ruta":"ka"},{"name":"ma","ruta":"ma"},{"name":"ta","ruta":"ta"}],
     visualize = 2,
+    kanaScaling = 0.4,
+    canvasBaseWidth = 1152, canvasBaseHeight = 812,
     streak, best, streakText, bestText,
     stats = new Game1Stats(), counter = 0, timeIni;
 
@@ -19,19 +21,24 @@ socket.on('acknowledge', function(ack){
 });
 
 function game1(){
+
+  window.onresize = resize;
+  resize();
+
   socket.emit('getsyllables', 0, function (data) {
     kana = data[0];
 
     updateBest(data[1]);
 
     manifest = [];
+    manifest.push({src:"images/app1/bg.gif", id:"bg", imageType:"background"});
+    manifest.push({src:"images/app1/canvas.png", id:"canvas"});
     for(var i=0; i<kana.length; i++){
-      manifest.push({src:kanaRoute+"hiragana/"+kana[i].route+".gif", id:kana[i].route});
+      manifest.push({src:kanaRoute+"hiragana/"+kana[i].route+".gif", id:kana[i].route, imageType:"kana"});
     }
     for(var i=0; i<kana.length; i++){
-      manifest.push({src:kanaRoute+"katakana/"+kana[i].route+".gif", id:kana[i].route});
+      manifest.push({src:kanaRoute+"katakana/"+kana[i].route+".gif", id:kana[i].route, imageType:"kana"});
     }
-
 
     queue = new createjs.LoadQueue();
     queue.addEventListener("progress", handleProgress);
@@ -42,8 +49,8 @@ function game1(){
   });
 
   // Text
-  streakText = new createjs.Text("", "20px Play", "#ff7700"); streakText.x = 280; streakText.y = 20; streakText.textBaseline = "alphabetic";
-  bestText = new createjs.Text("", "20px Play", "#ff7700"); bestText.x = 280; bestText.y = 40; bestText.textBaseline = "alphabetic";
+  streakText = new createjs.Text("", "22px Play", "#ff7700"); streakText.x = 20; streakText.y = 20; streakText.textBaseline = "alphabetic";
+  bestText = new createjs.Text("", "22px Play", "#ff7700"); bestText.x = 20; bestText.y = 44; bestText.textBaseline = "alphabetic";
 
   // Internationalization
   i18n.init({ useCookie: false },setLngVariables);
@@ -51,20 +58,18 @@ function game1(){
   tweening = false;
   currentImg = 0;
 	totalLoaded = 0;
-	images = [];
+  images = {};
+	kanaImages = [];
 
   stage = new createjs.Stage(document.getElementById("stage"));
 
-  // Progress bar
-  progressbg = new createjs.Shape();
-  progressbg.graphics.beginFill("#000000").drawRect(37, 172, 300, 30);
-  stage.addChild(progressbg);
-  progress = new createjs.Shape();
-  progress.graphics.beginFill("#ff0000").drawRect(37, 172, 0, 30);
-  stage.addChild(progress);
-
   createjs.Ticker.setFPS(30);
   createjs.Ticker.addEventListener("tick",stage);
+}
+
+function resize(){
+  $("#stage").width(window.innerWidth);
+  $("#stage").height(window.innerHeight);
 }
 
 function handleProgress(event){
@@ -75,19 +80,24 @@ function handleComplete(event){
 
   setTimeout(function(){
         stage.removeAllChildren();
+        stage.addChild(background);
         stage.addChild(streakText);
         stage.addChild(bestText);
-        stage.addChild(images[0]);
+
+        images["canvas"].scaleY = 1.5;
+        images["canvas"].x = (canvasBaseWidth-images["canvas"].getBounds().width*images["canvas"].scaleX)/2;
+        images["canvas"].y = (canvasBaseHeight-images["canvas"].getBounds().height*images["canvas"].scaleY)/2;
+        stage.addChild(images["canvas"]);
+
+        stage.addChild(kanaImages[0]);
         stage.update();
 
         $("#input1").on("input",inputChange);
         $("#select1").change(selectChange);
 
-        $("#boton1").css("display","block");
-        $("#input1").css("display","block");
-        $("#select1").css("display","block");
+        $("#input_div").css("display","block");
 
-        $("#progress_bar_container").css("display","none");
+        $("#loading_screen_container").css("display","none");
         $("#stage").css("display","block");
         timeIni = new Date().getTime();
         $("#input1").focus();
@@ -104,12 +114,37 @@ function handleFileLoad(event){
       //image loaded
       var img = new Image();
       img.src = event.item.src;
+      $(img).load( function() {
 
-      images[totalLoaded] = new createjs.Bitmap(img);
-      images[totalLoaded].scaleX=0.75;
-      images[totalLoaded].scaleY=0.75;
+        switch(event.item.imageType){
+          case "background":
+            background = new createjs.Bitmap(img);
+            background.x = 0;
+            background.y = 0;
+            break;
 
-      totalLoaded++;
+          case "kana":
+            kanaImages[totalLoaded] = new createjs.Bitmap(img);
+            kanaImages[totalLoaded].scaleX = kanaScaling;
+            kanaImages[totalLoaded].scaleY = kanaScaling;
+            kanaImages[totalLoaded].x = (canvasBaseWidth-img.width*kanaScaling)/2;
+            kanaImages[totalLoaded].y = (canvasBaseHeight-img.height*kanaScaling)/2;
+            totalLoaded++;
+            break;
+
+          default:
+            var bitmap =  new createjs.Bitmap(img);
+            bitmap.x = 0;
+            bitmap.y = 0;
+
+            images[event.item.id] = bitmap;
+            break;
+        }
+
+      }).error( function() {
+        console.log("Unable to load resource: "+event.item.src);
+      });
+
       break;
   }
 }
@@ -147,17 +182,17 @@ function nextImg(){
     tweening = true;
     $("#input1").attr("disabled",true);
 
-    createjs.Tween.get(images[currentImg]).to({x:-images[currentImg].getBounds().width, scaleX:0.25, scaleY:0.25}, 1000);
+    createjs.Tween.get(kanaImages[currentImg]).to({x:-kanaImages[currentImg].getBounds().width*0.1, scaleX:0.1, scaleY:0.1}, 1000);
 
     var nextImg = Math.floor(visualize === 2 ? Math.random()*2*kana.length : visualize*kana.length+Math.random()*kana.length);
     currentImg = currentImg === nextImg ? visualize === 2 ? (nextImg+1)%(kana.length*2) : visualize*kana.length+((nextImg+1)%kana.length) : nextImg;
 
-    images[currentImg].x = 375;
-    images[currentImg].scaleX = 0.25;
-    images[currentImg].scaleY = 0.25;
-    stage.addChild(images[currentImg]);
+    kanaImages[currentImg].x = canvasBaseWidth;
+    kanaImages[currentImg].scaleX = 0.1;
+    kanaImages[currentImg].scaleY = 0.1;
+    stage.addChild(kanaImages[currentImg]);
 
-    createjs.Tween.get(images[currentImg]).to({x:0, scaleX:0.75, scaleY:0.75}, 1000, createjs.Ease.linear).call(finishShift);
+    createjs.Tween.get(kanaImages[currentImg]).to({x:(canvasBaseWidth-kanaImages[currentImg].getBounds().width*kanaScaling)/2, scaleX:kanaScaling, scaleY:kanaScaling}, 1000, createjs.Ease.linear).call(finishShift);
 
     stage.update();
   }
