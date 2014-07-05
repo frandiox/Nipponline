@@ -1,0 +1,71 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[spanish,activeacute]{babel}
+
+% Doble interlineado
+\linespread{1.3}
+
+% Anade espacio vertical entre los parrafos, ajustando el espacio en listas
+\usepackage{parskip}
+
+% ...pero mantiene el indentado al principio de los parrafos
+\setlength\parindent{1.5em}
+
+% Sustituye la seccion de referencias por una seccion numerada
+%\usepackage{referencias_como_seccion}
+
+% Tablas flexibles
+%\usepackage{tabu}
+%\usepackage{longtable}
+
+% Graficos
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+% \usepackage[latin1]{inputenc}
+ \usepackage{lmodern}
+% \usepackage[T1]{fontenc}
+
+
+% Fancy header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{\textbf{\Nipponline{} - Aprendizaje online de japon\'es}}
+\chead{}
+\rhead{\thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
+% Cada seccion empieza una pagina nueva
+\let\stdsection\section
+\renewcommand\section{\newpage\stdsection}
+
+% Macros usadas frecuentemente
+\newcommand{\Nipponline}{\mbox{\emph{Nipponline}}}
+
+\usepackage[pdftex]{hyperref}
+\hypersetup{pdfauthor={Francisco Miguel Dios Buitrago, Sergio Balbuena Pantigas}}
+\hypersetup{pdftitle={\Nipponline{}}}
+
+% True para una copia digital, false para una copia impresa
+\hypersetup{colorlinks=true}
+
+
+\begin{document}
+    \include{titulo}
+    %\include{manifiesto}
+    %\include{autorizacion_biblioteca}
+    \include{tabla_de_contenidos}
+    \include{introduccion}
+    \include{implementacion}
+    \include{api}
+    \include{trabajo_realizado}
+    \include{licencia}
+    \include{cusl_y_prensa}
+    \include{futuro}
+    \include{conclusiones}
+    \include{bibliografia}
+    \include{agradecimientos}
+\end{document}
+

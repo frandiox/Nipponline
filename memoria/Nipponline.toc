@@ -1,0 +1,32 @@
+\select@language {spanish}
+\contentsline {section}{\numberline {1}Introducci'on}{4}{section.1}
+\contentsline {subsection}{\numberline {1.1}Justificaci'on y descripci'on del proyecto}{4}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Motivaci'on}{5}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Alternativas}{6}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Alcance del proyecto}{7}{subsection.1.4}
+\contentsline {section}{\numberline {2}Implementaci'on}{8}{section.2}
+\contentsline {subsection}{\numberline {2.1}Tecnolog'ias y herramientas}{8}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Programaci'on front y back-end}{8}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}Web Application Framework}{8}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}Boilerplate}{8}{subsubsection.2.1.3}
+\contentsline {subsubsection}{\numberline {2.1.4}Base de datos}{8}{subsubsection.2.1.4}
+\contentsline {subsubsection}{\numberline {2.1.5}Configuraci'on del servidor}{8}{subsubsection.2.1.5}
+\contentsline {subsubsection}{\numberline {2.1.6}Biblioteca de dibujo}{8}{subsubsection.2.1.6}
+\contentsline {subsubsection}{\numberline {2.1.7}Internacionalizaci'on}{8}{subsubsection.2.1.7}
+\contentsline {subsubsection}{\numberline {2.1.8}Gamificaci'on}{8}{subsubsection.2.1.8}
+\contentsline {subsubsection}{\numberline {2.1.9}Control de versiones}{8}{subsubsection.2.1.9}
+\contentsline {subsection}{\numberline {2.2}Comunidad}{8}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Aplicaciones}{8}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Syllables}{8}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Words}{8}{subsubsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.3}Pictionary}{8}{subsubsection.2.3.3}
+\contentsline {section}{\numberline {3}Application Programming Interface (API)}{9}{section.3}
+\contentsline {section}{\numberline {4}Trabajo realizado}{10}{section.4}
+\contentsline {section}{\numberline {5}Licencia}{11}{section.5}
+\contentsline {subsection}{\numberline {5.1}C'odigo}{11}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Media}{11}{subsection.5.2}
+\contentsline {section}{\numberline {6}CUSL y prensa}{12}{section.6}
+\contentsline {section}{\numberline {7}Futuro}{13}{section.7}
+\contentsline {section}{\numberline {8}Conclusiones}{14}{section.8}
+\contentsline {section}{\numberline {9}Bibliograf'ia}{15}{section.9}
+\contentsline {section}{\numberline {10}Agradecimientos}{16}{section.10}
