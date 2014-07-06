@@ -1,2 +1,41 @@
 \section{Trabajo realizado}
 \label{sub:trabajo_realizado}
+
+En este secci'on se resume el proceso de trabajo seguido durante la realizaci'on del proyecto desde su inicio hasta
+el d'ia de hoy.
+
+\begin{itemize}
+\item \textbf{Idea inicial.} Como ya hemos comentado en la introducci'on, el proyecto Nipponline ha existido desde
+hace un tiempo, a lo largo del cual se ha gestado hasta el punto de convertirse en nuestro proyecto de fin de carrera.
+En primer lugar hemos establecido los objetivos que queremos cumplir con este proyecto (crear una comunidad de
+usuarios afines a la cultura japonesa que deseen aprender el idioma, proporcion'andoles recursos unificados y
+aplicaciones) y comprobando que, efectivamente, no existe ninguna soluci'on que los cubra actualmente, dando luz
+verde a la concepci'on del proyecto.
+\item \textbf{An'alisis de tecnolog'ias.} El siguiente paso ha sido examinar diferentes tecnolog'ias disponibles que
+se ajustaran a nuestras necesidades, permiti'endonos desarrollar el proyecto tal y como lo ten'iamos en mente. 
+Obviamente, hay numerosas alternativas para cada apartado y tenemos que asegurarnos de tomar la decisi'on acertada
+para no tener, en el futuro, que cambiar grandes partes del proyecto. A modo de ejemplo, una vez decidido utilizar el
+software NodeBB para nuestra comunidad qued'o claro que ten'iamos que usar una base de datos no relacional, puesto
+que este era el caso para NodeBB y no quer'iamos vernos forzados a instalar en el servidor numerosas bases de datos
+para distintas partes del proyecto.
+\item \textbf{Dise'no de la base de datos.} Antes de empezar a implementar nada, quisimos realizar un dise'no
+preliminar de la base de datos del idioma, puesto que es un elemento de gran importancia para nuestro proyecto y un
+mal dise'no de la misma podr'ia llevar a catastr'oficos resultados como tener que modificarla con el proyecto ya
+avanzado (y junto a esta, cualquier aplicaci'on que use los datos extra'idos de ella).
+De este modo, la implementaci'on de la API y de las futuras aplicaciones estar'ia condicionado por el dise'no de la
+base de datos y no al contrario, como podr'ia haber ocurrido si se hubiera empezado a implementar aplicaciones sin
+tener un dise'no de la base de datos inicial.
+\item \textbf{Implementaci'on del servidor.} Antes de empezar a desarrollar las aplicaciones del lado del cliente se
+puso un gran esfuerzo en preparar un servidor con Node.js y NodeBB, as'i como en conseguir programar sesiones de
+usuario compartidas entre nuestra app de Node.js y NodeBB (cada uno se ejcuta como una app de Node.js independiente,
+lo que significa que, salvo indicaci'on expl'icita, usan sesiones diferentes).
+Tambi'en se desarrollan en este punto funciones para trabajar con la base de datos, que extra'igan o introduzcan
+datos en esta.
+Del mismo modo, tambi'en empieza en este punto la implementaci'on de las llamadas iniciales de la API, necesarias
+para el desarrollo de las primeras aplicaciones.
+\item \textbf{Implementaci'on de las aplicaciones.} Una vez listos el servidor, base de datos y (parcialmente) la
+API, podemos empezar ya el desarrollo de las aplicaciones del cliente usando nuestra biblioteca elegida, CreateJS.
+Como ya hemos mencionado, es importante que el desarrollo de las aplicaciones se realice despu'es del dise'no de la
+base de datos y de la API, a fin de convertirlo en un proceso independiente del dise'no del la parte del servidor y
+abrir su utilizaci'on a posibles colaboradores.
+\end{itemize}

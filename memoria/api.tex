@@ -1,2 +1,24 @@
 \section{Application Programming Interface (API)}
 \label{sub:application_programming_interface_(api)}
+
+Actualmente nuestra API (accesible mediante Socket.IO) se compone de 2 llamadas diferentes, necesarias para el
+desarrollo de las aplicaciones actualmente funcionales. No obstante, en el futuro pretendemos ampliar el tama'no y
+funcionalidad de nuestra API para atraer con mayor facilidad a colaboradores a nuestro proyecto.
+
+Las llamadas existentes se listan a continuaci'on:
+
+\begin{itemize}
+\item \textbf{getsyllables:} No recibe ning'un argumento. Al recibir esta petici'on de un cliente, el servidor accede
+a la base de datos de s'ilabas y extrae una lista en formato JSON con todas las s'ilabas disponibles, que es enviada
+al cliente que hizo la petici'on.
+Actualmente, esta llamada simplemente devuelve una lista de todas las s'ilabas y no recibe argumentos. No obstante,
+en el futuro est'a planeado modificar esta llamada para aceptar argumentos que permiten seleccionar un subconjunto
+espec'ifico de s'ilabas, en caso de que no se quieran obtener todas.
+\item \textbf{getwords:} No recibe argumentos. Esta llamada es similar a la anterior, con la diferencia de que en
+esta ocasi'on el servidor hace una petici'on a la base de datos para obtener un conjunto de 50 palabras distintas (si
+la base de datos no dispone de suficientes palabras, como es nuestro caso actualmente, se duplican las existentes en
+la lista hasta alcanzar la cantidad de 50) a devolver al cliente que hizo la petici'on.
+Del mismo modo que con getsyllables, est'a planeado que esta llamada sea modificada en el futuro para aceptar
+argumentos que permitan filtrar las palabras extra'idas de la base de datos, as'i como el n'umero de palabras
+obtenidas.
+\end{itemize}
