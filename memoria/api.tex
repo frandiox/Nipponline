@@ -14,6 +14,27 @@ al cliente que hizo la petici'on.
 Actualmente, esta llamada simplemente devuelve una lista de todas las s'ilabas y no recibe argumentos. No obstante,
 en el futuro est'a planeado modificar esta llamada para aceptar argumentos que permiten seleccionar un subconjunto
 espec'ifico de s'ilabas, en caso de que no se quieran obtener todas.
+
+Los siguientes campos pueden estar presentes en cada uno de los objetos JSON dentro de la lista devuelta por esta
+llamada:
+
+\textbf{romaji} Romanizaci'on de la s'ilaba o como se escribir'ia con el alfabeto lat'in.
+
+\textbf{hiragana} Representaci'on en hiragana de la s'ilaba.
+
+\textbf{katakana} Representaci'on en katakana de la s'ilaba.
+
+\textbf{route} Romanizaci'on de la s'ilaba acompa'nada de un n'umero (e.g. re-1). Sirve el prop'osito de
+diferenciar entre s'ilabas cuya romanizaci'on es id'entica, pero no as'i su representaci'on en hiragana/katakana.
+
+\textbf{row} Fila a la que pertenece la s'ilaba. Por ejemplo, las s'ilabas ma,mi,mu,me,mo  pertenecen a la fila m.
+ 
+\textbf{column} Columna a la que pertenece la s'ilaba. Generalmente la columna denota la vocal que aparece en la s'ilaba
+(las vocales no tienen este campo).
+
+\textbf{youon} Si este campo est'a presente y su valor es true, indica que la s'ilaba es un diptongo.
+
+\textbf{obsolete} Si este campo est'a presente y su valor es true, indica que la s'ilaba est'a en desuso.
 \item \textbf{getwords:} No recibe argumentos. Esta llamada es similar a la anterior, con la diferencia de que en
 esta ocasi'on el servidor hace una petici'on a la base de datos para obtener un conjunto de 50 palabras distintas (si
 la base de datos no dispone de suficientes palabras, como es nuestro caso actualmente, se duplican las existentes en
@@ -21,4 +42,22 @@ la lista hasta alcanzar la cantidad de 50) a devolver al cliente que hizo la pet
 Del mismo modo que con getsyllables, est'a planeado que esta llamada sea modificada en el futuro para aceptar
 argumentos que permitan filtrar las palabras extra'idas de la base de datos, as'i como el n'umero de palabras
 obtenidas.
+
+Las palabras contenidas en la lista devuelta por esta llamada tienen los siguientes campos:
+
+\textbf{writing} Lista que contiene en cada posici'on la escritura usual de cada s'ilaba de la palabra en japon'es 
+(hiragana o katakana). Por ejemplo:
+
+\begin{center}
+\begin{CJK}{UTF8}{min}
+[と, も, だ, ち]
+\end{CJK}
+\end{center}
+
+\textbf{romaji} Lista que contiene en cada posici'on la romanizaci'on correspondiente a cada elemento de la lista
+writing anteriormente mencionada. Para el ejemplo anterior, esta lista contendr'ia:
+
+\begin{center}
+[to, mo, da, chi]
+\end{center}
 \end{itemize}
