@@ -22,6 +22,8 @@ build/Release
 # Latex
 *.aux
 *.tex.backup
+*.bbl
+*.blg
 *.out
 *.pdf
 
