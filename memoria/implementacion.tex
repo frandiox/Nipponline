@@ -1,19 +1,95 @@
 \section{Implementaci'on}
 \label{sec:implementacion}
 
+
 %%%%%%%%%%%%%%
 
 \subsection{Tecnolog'ias y herramientas}
 \label{sec:tecnologias_y_herramientas}
+
+Elegir las herramientas que usar'iamos en el proyecto no fue en muchos casos una tarea sencilla. En inform'atica en general,
+y en especial en el 'area de desarrollo web, aparecen cada d'ia muchas herramientas nuevas que cubren necesidades parecidas,
+que solapan en cuanto a utilidad o que atacan al mismo problema desde otro punto de vista. Es por esto que
+invertimos una gran parte del tiempo en estudiar las distintas tecnolog'ias disponibles para poder decantarnos por algunas
+de ellas. En algunas ocasiones no hemos encontrado una herramienta claramente superior a otra, por lo que nuestra decisi'on
+final se basa en cu'al nos ha llamado m'as la atenci'on o cu'al consideramos que ser'a m'as 'util en un futuro.
 
 \subsubsection{Programaci'on front y back-end}
 \label{sub:programacion_front_y_back_end}
 %javascript
 %nodejs
 
+La primera elecci'on que nos tuvimos que plantear fue el lenguaje de programaci'on, puesto que esto afectar'ia considerablemente
+la direcci'on que iba a tomar el proyecto. 
+
+\begin{itemize}
+\item Front-end
+\begin{center}
+\includegraphics[width=0.25\textwidth]{javascript}
+\end{center}
+
+Por una parte, puesto que nuestra idea era crear aplicaciones online, necesit'abamos un
+lenguaje apto para ser ejecutado en un navegador web, con lo que nos dejaba con pocas opciones en el lado del cliente. Entre estas
+opciones estaba Javascript, un lenguaje potente y bien documentado con una sintaxis que nos resultaba bastante familiar. Aunque existen
+otras alternativas como ActionScript o Dart, nuestra decisi'on en este aspecto estaba clara. 
+
+\item Back-end
+\begin{center}
+\includegraphics[width=0.4\textwidth]{nodejs}
+\end{center}
+
+Por otra parte, en cuanto a la programaci'on en el lado del servidor, nosotros ten'iamos cierta experiencia con PHP, pero lo
+consider'abamos un lenguaje algo anticuado y poco llamativo, por lo que intentamos buscar otras alternativas. Dos opciones interesantes
+fueron Ruby, con su framework Ruby-On-Rails, y Python con Django. A decir verdad, aunque los primeros est'an muy extendidos en el
+mundo del desarrollo web, nos interesamos m'as por los segundos, que eran algo m'as novedosos y llamativos.
+
+Sin embargo, cuando nos encontr'abamos en medio del estudio de las posibilidades que nos ofrec'ia Django, descubrimos de manera fortuita
+Node.js y, aunque no era una herramienta tan madura como Ruby-On-Rails o Django, su r'apido crecimiento y algunas otras caracter'isticas
+hicieron que nos decant'aramos por esta nueva opci'on sin dudarlo.
+
+Lo que m'as nos gust'o de Node.js e hizo que nos decant'aramos por ello de inmediato es que, en el fondo, es simplemente Javascript. Un
+Javascript ejecutado en el lado del servidor mediante el motor JS-V8\footnote{\url{https://developers.google.com/v8}} de Google, lo cual permite utilizar un modelo as'incrono y dirigido
+por eventos que podr'a, entre otras cosas, mantener muchas conexiones al servidor abiertas y esperando sin bloquearse y consumiendo menos
+recursos de la m'aquina. Adem'as, ya se han dado casos de grandes empresas que utilizan Node.js en parte de sus servicios, como es el caso de
+LinkedIn, los cuales mudaron parte de su c'odigo de Ruby-On-Rails a Node.js permiti'endoles pasar de 30 a 3 servidores necesarios, entre otras
+mejoras \cite{linkedin_nodejs} .
+
+Otro punto a favor de Node.js es su gestor de paquetes NPM, con el cual se puede instalar cualquier extensi'on para back-end que exista en el repositorio
+de forma r'apida y sencilla. Como se ha mencionado antes, Node.js est'a teniendo un crecimiento extremadamente r'apido, de forma que el n'umero
+de m'odulos existentes para esta tecnolog'ia est'a superando a otros gigantes del sector en muy poco tiempo de vida\footnote{\url{http://modulecounts.com/}}.
+Pero, sobretodo, lo m'as importante es que el tiempo que se invierte en la programaci'on de front o back-end
+tambi'en nos da experiencia en la otra parte, puesto que siempre estamos usando el mismo lenguaje.
+
+\item Aplicaciones m'oviles
+\begin{center}
+\includegraphics[width=0.4\textwidth]{phonegap}
+\end{center}
+
+Con el reciente auge del smartphone no se pod'ia pasar por alto el hecho de que si nuestras aplicaciones no llegan a dispositivos m'oviles
+estar'iamos perdiendo una gran parte del p'ublico potencial. Es por esto que, aunque en este PFC no hemos desarrollado nada centrado en
+este tema, s'i que hemos buscado qu'e posibilidades exist'ian para solventar este problema. Siguiendo la misma filosof'ia mostrada en las
+secciones anteriores, encontramos una herramienta llamada PhoneGap\footnote{\url{http://phonegap.com}} que permite crear aplicaciones m'oviles usando simplemente Javascript y
+HTML5, sin necesidad de invertir tiempo en aprender tecnolog'ias especializadas para cada plataforma m'ovil, como Android, iOS o Windows Phone.
+
+Encontramos, en definitiva, una raz'on m'as para elegir Javascript como piedra angular del proyecto.
+
+
+\end{itemize}
+
+
 \subsubsection{Web Application Framework}
 \label{sub:web_application_framework}
 %expressjs
+Es aconsejable el uso de un back-end web framework para facilitar la creaci'on de aplicaciones web. Aunque se puede utilizar Node.js sin m'as,
+esto nos obligar'ia a tener que implementar muchas tareas repetibles que ya han sido solucionadas y optimizadas en estos frameworks web.
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{express}
+\end{center}
+
+El rey por excelencia en este 'ambito es Express.js, el cual ayudar'a en la organizaci'on de las aplicaciones web ofreciendo una arquitectura
+Model-View-Controller. Adem'as, se encargar'a de las rutas de la aplicaci'on, de las peticiones a la base de datos, gesti'on de cookies,
+facilidades con motores de plantilla como Jade o Handlebars y de otras muchas caracter'isticas.
 
 \subsubsection{Boilerplate}
 \label{sub:boilerplate}
@@ -31,8 +107,8 @@
 \label{sub:comunicacion_cliente_servidor}
 %socket.io
 
-Nipponline es un proyecto de software libre y c'odigo abierto, por lo que cualquiera puede unirse al proyecto y
-colaborar con este desarrollando nuevas funcionalidades para el mismo.
+\Nipponline{} es un proyecto de software libre y c'odigo abierto, por lo que cualquiera puede unirse al proyecto y
+colaborar con 'este desarrollando nuevas funcionalidades para el mismo.
 
 Uno de los principales elementos del proyecto son las aplicaciones del lado del cliente enfocadas a aprender
 japon'es, y de las cuales tambi'en queremos que nuestros futuros colaboradores puedan ser part'icipes, de forma que
@@ -82,7 +158,7 @@ por el servidor (si se devuelven datos).
 
 Como ya hemos comentado anteriormente, nuestro lenguaje de elecci'on para la programaci'on en el
 lado del cliente va a ser Javascript. 
-Uno de los principales elementos de Nipponline son las aplicaciones del cliente, que permiten a
+Uno de los principales elementos de \Nipponline{} son las aplicaciones del cliente, que permiten a
 los usuarios aprender y reforzar su conocimiento del idioma japon'es a trav'es de minijuegos. El
 alto componente de gr'aficos y animaciones de estos minijuegos nos plantea un nuevo problema, ya
 que no podemos limitarnos a usar simplemente Javascript. Debemos, adem'as, hacer uso de una
@@ -219,13 +295,13 @@ translation = i18n.t("textField1");
 \label{sub:gamificacion}
 %mozillaBadges
 
-Como ya hemos comentado, con Nipponline no queremos limitarnos solo al desarrollo de un conjunto de aplicaciones para
+Como ya hemos comentado, con \Nipponline{} no queremos limitarnos solo al desarrollo de un conjunto de aplicaciones para
 aprender japon'es, sino que adem'as queremos crear una comunidad donde diferentes usuarios puedan interactuar entre
 s'i.
 
 El primer paso en la creaci'on de la comunidad pasa por el uso de unos foros que en nuestro caso nos proporciona un
 software de terceros. 
-Adicionalmente, queremos a'nadir a Nipponline una Gaming Layer: los usuarios de Nipponline tendr'an niveles, objetos
+Adicionalmente, queremos a'nadir a \Nipponline{} una Gaming Layer: los usuarios de \Nipponline{} tendr'an niveles, objetos
 o logros asociados a su cuenta. Todos estos elementos ser'an desbloqueables por medio de la participaci'on en la
 comunidad (participando en los foros, usando las aplicaciones y/o obteniendo ciertas puntuaciones en estas).
 
@@ -236,7 +312,7 @@ Mozilla\footnote{\url{http://www.openbadges.org/}}.
 \includegraphics[width=0.5\textwidth]{mozilla_badges}
 \end{center}
 
-OpenBadges permite a sitios web (como Nipponline) definir un conjunto de badges (medallas o insignias) a ser 
+OpenBadges permite a sitios web (como \Nipponline{}) definir un conjunto de badges (medallas o insignias) a ser 
 obtenidas por los usuarios de dichos sitios web al completar ciertas tareas. Estas insignias se almacenan en la
 Mozilla Backpack del usuario, que puede a partir de ese momento mostrar sus nuevas insignias en cualquier sitio web
 que implemente la capacidad de mostrar OpenBadges. 
@@ -248,12 +324,12 @@ OpenBadges.
 \includegraphics[width=1.0\textwidth]{badges_infrastructure}
 \end{center}
 
-OpenBadges es software libre, al igual que Nipponline, con las ventajas que esto conlleva. Cualquiera puede crear y
+OpenBadges es software libre, al igual que \Nipponline{}, con las ventajas que esto conlleva. Cualquiera puede crear y
 otorgar su propio conjunto de insignias a usuarios por realizar tareas.
-Adem'as, los usuarios pueden mostrar, si as'i lo desean, las insignias obtenidas en Nipponline en cualquier lugar en
+Adem'as, los usuarios pueden mostrar, si as'i lo desean, las insignias obtenidas en \Nipponline{} en cualquier lugar en
 el que esto sea posible (existen plugins para Wordpress o Twitter que a'naden esta  funcionalidad). Esta es la raz'on
-principal de hacer uso de OpenBadges en Nipponline en lugar de crear nuestro propio conjunto de insignias privado
-(caso en el que las insignias obtenidas no habr'ian abandonado el 'ambito de Nipponline, limitando la difusi'on de la
+principal de hacer uso de OpenBadges en \Nipponline{} en lugar de crear nuestro propio conjunto de insignias privado
+(caso en el que las insignias obtenidas no habr'ian abandonado el 'ambito de \Nipponline{}, limitando la difusi'on de la
 comunidad).
 
 Una desventaja del uso de OpenBadges es el hecho de que es necesario que el usuario posea una Mozilla Backpack donde
@@ -265,13 +341,13 @@ alguno.
 %Git
 %Github
 
-Dada la naturaleza colaborativa del proyecto Nipponline (no solo hemos trabajado conjuntamente en 'el dos personas, 
+Dada la naturaleza colaborativa del proyecto \Nipponline{} (no solo hemos trabajado conjuntamente en 'el dos personas, 
 sino que al ser software libre es posible que en el futuro aparezcan nuevos colaboradores para trabajar en el 
 proyecto) necesitamos utilizar alg'un software de control de versiones que permita la colaboraci'on fluida y de forma
 sencilla de diferentes personas en el desarrollo del proyecto.
 
 Obviamente, es imposible trabajar en el proyecto de forma local, dado que desde un primer momento hemos sido personas
-los que hemos estado trabajando en el desarrollo de Nipponline. Adem'as, conforme un proyecto va creciendo se hace
+los que hemos estado trabajando en el desarrollo de \Nipponline{}. Adem'as, conforme un proyecto va creciendo se hace
 cada vez m'as dif'icil mantener de forma local el historial de cambios del mismo y su mantenimiento se vuelve muy
 tedioso.
 

@@ -23,6 +23,7 @@ build/Release
 *.aux
 *.tex.backup
 *.out
+*.pdf
 
 # Dependency directory
 # Deployed apps should consider commenting this line out:
