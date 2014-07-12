@@ -1,5 +1,9 @@
 \begin{thebibliography}{1}
 
+\bibitem{mongodbmanual}
+The {M}ongo{DB} 2.6 {M}anual.
+\newblock \url{http://docs.mongodb.org/manual/}.
+
 \bibitem{mozillawiki}
 {M}ozilla {O}pen {B}adges {I}nfrastructure, {M}ozilla{W}iki.
 \newblock \url{https://wiki.mozilla.org/Badges/Onboarding-Issuer}.

@@ -40,21 +40,21 @@ otras alternativas como ActionScript o Dart, nuestra decisi'on en este aspecto e
 
 Por otra parte, en cuanto a la programaci'on en el lado del servidor, nosotros ten'iamos cierta experiencia con PHP, pero lo
 consider'abamos un lenguaje algo anticuado y poco llamativo, por lo que intentamos buscar otras alternativas. Dos opciones interesantes
-fueron Ruby, con su framework Ruby-On-Rails, y Python con Django. A decir verdad, aunque los primeros est'an muy extendidos en el
+fueron Ruby, con su framework Ruby-On-Rails\footnote{\url{http://rubyonrails.org}}, y Python con Django\footnote{\url{https://www.djangoproject.com}}. A decir verdad, aunque los primeros est'an muy extendidos en el
 mundo del desarrollo web, nos interesamos m'as por los segundos, que eran algo m'as novedosos y llamativos.
 
 Sin embargo, cuando nos encontr'abamos en medio del estudio de las posibilidades que nos ofrec'ia Django, descubrimos de manera fortuita
-Node.js y, aunque no era una herramienta tan madura como Ruby-On-Rails o Django, su r'apido crecimiento y algunas otras caracter'isticas
+Node.js\footnote{\url{http://nodejs.org}} y, aunque no era una herramienta tan madura como Ruby-On-Rails o Django, su r'apido crecimiento y algunas otras caracter'isticas
 hicieron que nos decant'aramos por esta nueva opci'on sin dudarlo.
 
-Lo que m'as nos gust'o de Node.js e hizo que nos decant'aramos por ello de inmediato es que, en el fondo, es simplemente Javascript. Un
+Lo que m'as nos gust'o de Node.js e hizo que lo eligi'eramos de inmediato es que, en el fondo, es simplemente Javascript. Un
 Javascript ejecutado en el lado del servidor mediante el motor JS-V8\footnote{\url{https://developers.google.com/v8}} de Google, lo cual permite utilizar un modelo as'incrono y dirigido
 por eventos que podr'a, entre otras cosas, mantener muchas conexiones al servidor abiertas y esperando sin bloquearse y consumiendo menos
 recursos de la m'aquina. Adem'as, ya se han dado casos de grandes empresas que utilizan Node.js en parte de sus servicios, como es el caso de
-LinkedIn, los cuales mudaron parte de su c'odigo de Ruby-On-Rails a Node.js permiti'endoles pasar de 30 a 3 servidores necesarios, entre otras
+LinkedIn\footnote{\url{https://www.linkedin.com}}, los cuales mudaron parte de su c'odigo de Ruby-On-Rails a Node.js permiti'endoles pasar de 30 a 3 servidores necesarios, entre otras
 mejoras \cite{linkedin_nodejs} .
 
-Otro punto a favor de Node.js es su gestor de paquetes NPM, con el cual se puede instalar cualquier extensi'on para back-end que exista en el repositorio
+Otro punto a favor de Node.js es su gestor de paquetes NPM\footnote{\url{https://www.npmjs.org}}, con el cual se puede instalar cualquier extensi'on para back-end que exista en el repositorio
 de forma r'apida y sencilla. Como se ha mencionado antes, Node.js est'a teniendo un crecimiento extremadamente r'apido, de forma que el n'umero
 de m'odulos existentes para esta tecnolog'ia est'a superando a otros gigantes del sector en muy poco tiempo de vida\footnote{\url{http://modulecounts.com/}}.
 Pero, sobretodo, lo m'as importante es que el tiempo que se invierte en la programaci'on de front o back-end
@@ -87,17 +87,182 @@ esto nos obligar'ia a tener que implementar muchas tareas repetibles que ya han 
 \includegraphics[width=0.5\textwidth]{express}
 \end{center}
 
-El rey por excelencia en este 'ambito es Express.js, el cual ayudar'a en la organizaci'on de las aplicaciones web ofreciendo una arquitectura
+El rey por excelencia en este 'ambito es Express.js\footnote{\url{http://expressjs.com}}, el cual ayudar'a en la organizaci'on de las aplicaciones web ofreciendo una arquitectura
 Model-View-Controller. Adem'as, se encargar'a de las rutas de la aplicaci'on, de las peticiones a la base de datos, gesti'on de cookies,
-facilidades con motores de plantilla como Jade o Handlebars y de otras muchas caracter'isticas.
+facilidades con motores de plantillas como Jade o Handlebars y de otras muchas caracter'isticas (middlewares).
 
-\subsubsection{Boilerplate}
-\label{sub:boilerplate}
+Crear una aplicaci'on con Express.js es una tarea muy sencilla:
+
+\begin{verbatim}
+var express = require('express');
+var app = express();
+
+var server = app.listen(3000, function() {
+    console.log('Listening on port %d', server.address().port);
+});
+\end{verbatim}
+
+
+A modo de ejemplo, una forma de establecer rutas con Express.js ser'ia de la siguiente forma:
+\begin{verbatim}
+app.get('/', routes.index);
+app.get('/words',applications.game1);
+\end{verbatim}
+
+Como puede observarse, esto facilita mucho el camino a la hora de crear aplicaciones REST.
 
 \subsubsection{Base de datos}
 \label{sub:base_de_datos}
+%nosql
+Una de las partes m'as importantes de este proyecto es la base de datos. Describir el idioma
+japon'es de forma que podamos almacenar tanta informaci'on sobre sus s'ilabas y palabras
+como sea posible en una base de datos no es una tarea sencilla. Antes de empezar con el dise'no
+realizamos un estudio de las distintas alternativas de bases de datos que exist'ian para poder
+escoger la que m'as se adaptara a nuestras necesidades. Hasta este proyecto solamente ten'iamos
+experiencia en el uso de bases de datos relacionales como MySQL\footnote{\url{http://www.mysql.com}}, PostgreSQL\footnote{\url{http://www.postgresql.org}} o MariaDB\footnote{\url{https://mariadb.org}}, pero
+siempre hemos tenido cierta inquietud por saber qu'e era aquello del ``NoSQL''.
+
+Somos partidarios del uso de bases de datos relacionales
+para almacenar ``datos relacionales'', pero en esta ocasi'on pensamos que quiz'a nuestros
+datos no se adaptar'ian bien a una forma de tabla estricta. Por lo tanto, llegamos a la
+conclusi'on de que le sacar'iamos m'as partido a una base de datos NoSQL por varios motivos,
+siendo el m'as importante que en esta base de datos tendr'iamos que describir un lenguaje
+complejo, ambiguo y con una inmensa cantidad de excepciones y cosas poco comunes como es
+el japon'es. En una base de datos relacional se nos presentar'ian ciertas limitaciones que,
+aunque subsanables, posiblemente ser'ian poco elegantes.
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{nosql}
+\end{center}
+
+En las bases de datos relacionales, aunque cada una tiene su peculiaridad, todas comparten
+el mismo fundamento, por lo que no es tan complicado elegir entre ellas. Sin embargo, existen
+muchos tipos diferentes de bases de datos NoSQL, por lo que debemos elegir una
+bas'andonos en nuestras necesidades, forma de trabajar, software de terceros que utilicemos e
+incluso en el hardware que disponemos.
+
+Las bases de datos NoSQL se pueden clasificar de diferentes maneras, aunque en general se consideran
+cuatro tipos de ellas. A saber:
+
+\begin{itemize}
+ \item Orientadas a documentos.
+ Suelen contener datos semi-estructurados organizados en forma de documentos. El formato de dichos
+ documentos suele ser un est'andar como XML, YAML o JSON (o BSON, JSON en binario). En general, son las bases
+ de datos NoSQL m'as vers'atiles, pudiendo formar parte de proyectos muy diversos. Compar'andolo
+ con bases de datos relacionales, los documentos se almacenan en colecciones de forma an'aloga
+ a los registros en tablas, pero con la diferencia de que, mientras los registros tienen una
+ estructura inmutable (misma secuencia de campos), los documentos son totalmente variables y
+ no tienen por qu'e guardar relaci'on entre s'i.
+ 
+ Algunos de los ejemplos m'as famosos son MongoDB\footnote{\url{http://www.mongodb.org}} y CouchDB\footnote{\url{http://couchdb.apache.org/}}.
+ 
+ \item Orientadas a columnas.
+ Su funcionamiento es parecido al de las bases de datos relacionales, pero en lugar de almacenar registros
+ utilizan columnas de datos. Su uso principal se centra en realizar agregaciones y consultas sobre
+ grandes cantidades de datos.
+ 
+ La base de datos Cassandra\footnote{\url{http://cassandra.apache.org}} podr'ia incluirse en esta secci'on.
+ 
+ \item Clave-valor.
+ Su modelo de datos fundamental es el de array asociativo (diccionarios), donde los datos se representan
+ como pares clave-valor, de forma que cuando se necesita extraer un dato se realiza una
+ b'usqueda por su clave.
+ 
+ Un ejemplo de base de datos Clave-valor es Redis\footnote{\url{http://redis.io}}.
+ 
+ \item En grafo.
+ Estas bases de datos se basan en teor'ia de grafos, utilizando nodos, aristas y propiedades para
+ representar y almacenar los datos. Esto quiere decir que cada elemento almacenado en la base
+ de datos contiene un puntero directo a sus elementos adyacentes, por lo que pueden llegar a
+ ser muy 'utiles para algunos proyectos espec'ificos como pueden ser redes sociales.
+ 
+ En esta categor'ia se encontrar'ia, por ejemplo, Neo4J\footnote{\url{http://www.neo4j.org}}.
+ 
+\end{itemize}
+
+Despu'es de revisar las caracter'isticas de muchas de estas bases de datos y la acogida que ten'ian en la
+comunidad, nos gustaron especialmente tres
+de ellas: MongoDB, CouchDB y Redis. Sin embargo, como se coment'o al principio de esta secci'on, hay factores
+externos adem'as de las caracter'isticas de cada una que debemos tener en cuenta. Debido a un software de terceros
+que usaremos para la comunidad, nos vimos obligados a descartar CouchDB puesto que no era compatible con esta base de datos.
+S'i lo es, en cambio, con MongoDB y Redis. Por otra parte, Redis almacena los datos en memoria RAM y, aunque
+con el hardware que utilizamos en el momento de realizar este PFC no tendr'iamos ning'un problema, es posible
+que en un futuro esto no sea as'i, por lo que tambi'en descartamos Redis en favor de MongoDB.
+
 %mongodb
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{mongodb}
+\end{center}
+
+MongoDB es una base de datos orientada a documentos de c'odigo abierto que proporciona alto rendimiento,
+alta disponibilidad y escalado autom'atico \cite{mongodbmanual}.
+
+La siguiente imagen muestra de forma gr'afica la organizaci'on de los datos en MongoDB y c'omo se realizar'ia
+una funci'on para insertar nuevos datos\cite{mongodbmanual}:
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{mongodb_insert}
+\end{center}
+
+Dentro de las bases de datos NoSQL, MongoDB es una de las que han empezado con m'as fuerza
+y que se ha hecho bastante conocida. Adem'as, sus documentos usan una estructura en formato
+JSON (aunque se almacenan en BSON), lo cual hace que la transferencia de datos entre el servidor
+y la propia base de datos sea muy sencilla, puesto que Javascript posee soporte nativo para JSON.
+Por este motivo, el uso com'un de Javascript y JSON, Node.js y MongoDB se han empezado a utilizar
+conjuntamente en numerosos proyectos en los 'ultimos a'nos.
+
 %mongoose
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{mongodb_mongoose}
+\end{center}
+
+Para simplificar la conexi'on entre Node.js y MongoDB se ha utilizado MongooseJS\footnote{\url{http://mongoosejs.com}}, un
+Object Data Modeling (ODM) que envuelve al controlador nativo de conexi'on de Node.js.
+\begin{verbatim}
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+\end{verbatim}
+Mongoose proporciona un modelado riguroso de los datos mediante el uso de esquemas, reforzando la estructura
+y comprobando la validez de los datos a la vez que se mantiene la flexibilidad que hace a MongoDB tan
+potente. El modo de funcionamiento de Mongoose es el siguiente. Primero se define un esquema:
+
+\begin{verbatim}
+var userSchema = mongoose.Schema({
+    name: String,
+    age: { type: Number, min: 0}
+})
+\end{verbatim}
+
+Luego se crea un modelo a partir del esquema definido anteriormente:
+
+\begin{verbatim}
+var SUser = mongoose.model('SUser', userSchema);
+\end{verbatim}
+
+Se instancia:
+
+\begin{verbatim}
+var Larry = new SUser({ name: 'Larry' }, age: 46);
+\end{verbatim}
+
+Y se guarda en la base de datos:
+
+\begin{verbatim}
+Larry.save(function (err) {if (err) console.log ('Error')});
+\end{verbatim}
+
+MongoDB crear'a una base de datos y una colecci'on bajo demanda en caso de que no existan ya. Adem'as, se pueden
+asociar m'etodos a los esquemas y ejecutar consultas sobre los modelos definidos para obtener datos de la base
+de datos con esta estructura. Como puede observarse, en general, Mongoose hace incluso m'as f'acil la conexi'on
+entre Node.js y MongoDB.
+
+
+
+
+\subsubsection{Boilerplate}
+\label{sub:boilerplate}
 
 \subsubsection{Configuraci'on del servidor}
 \label{sub:configuracion_del_servidor}
