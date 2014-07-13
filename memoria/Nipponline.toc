@@ -13,20 +13,20 @@
 \contentsline {subsubsection}{\numberline {2.1.5}Configuraci'on del servidor}{17}{subsubsection.2.1.5}
 \contentsline {subsubsection}{\numberline {2.1.6}Comunicaci'on cliente-servidor}{17}{subsubsection.2.1.6}
 \contentsline {subsubsection}{\numberline {2.1.7}Biblioteca de dibujo}{19}{subsubsection.2.1.7}
-\contentsline {subsubsection}{\numberline {2.1.8}Internacionalizaci'on}{21}{subsubsection.2.1.8}
+\contentsline {subsubsection}{\numberline {2.1.8}Internacionalizaci'on}{22}{subsubsection.2.1.8}
 \contentsline {subsubsection}{\numberline {2.1.9}Gamificaci'on}{23}{subsubsection.2.1.9}
 \contentsline {subsubsection}{\numberline {2.1.10}Control de versiones}{25}{subsubsection.2.1.10}
 \contentsline {subsection}{\numberline {2.2}Comunidad}{29}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Aplicaciones}{29}{subsection.2.3}
-\contentsline {subsubsection}{\numberline {2.3.1}Syllables}{33}{subsubsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.2}Words}{36}{subsubsection.2.3.2}
-\contentsline {subsubsection}{\numberline {2.3.3}Pictionary}{39}{subsubsection.2.3.3}
-\contentsline {section}{\numberline {3}Application Programming Interface (API)}{40}{section.3}
-\contentsline {section}{\numberline {4}Trabajo realizado}{42}{section.4}
-\contentsline {section}{\numberline {5}Licencia}{44}{section.5}
-\contentsline {subsection}{\numberline {5.1}C'odigo}{44}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Media}{45}{subsection.5.2}
-\contentsline {section}{\numberline {6}CUSL y prensa}{47}{section.6}
-\contentsline {section}{\numberline {7}Futuro}{48}{section.7}
-\contentsline {section}{\numberline {8}Conclusiones}{49}{section.8}
-\contentsline {section}{\numberline {9}Agradecimientos}{50}{section.9}
+\contentsline {subsection}{\numberline {2.3}Aplicaciones}{31}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Syllables}{35}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Words}{38}{subsubsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.3}Pictionary}{41}{subsubsection.2.3.3}
+\contentsline {section}{\numberline {3}Application Programming Interface (API)}{42}{section.3}
+\contentsline {section}{\numberline {4}Trabajo realizado}{44}{section.4}
+\contentsline {section}{\numberline {5}Licencia}{46}{section.5}
+\contentsline {subsection}{\numberline {5.1}C'odigo}{46}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Media}{47}{subsection.5.2}
+\contentsline {section}{\numberline {6}CUSL y prensa}{49}{section.6}
+\contentsline {section}{\numberline {7}Futuro}{50}{section.7}
+\contentsline {section}{\numberline {8}Conclusiones}{52}{section.8}
+\contentsline {section}{\numberline {9}Agradecimientos}{53}{section.9}

@@ -220,10 +220,12 @@ conjuntamente en numerosos proyectos en los 'ultimos a'nos.
 
 Para simplificar la conexi'on entre Node.js y MongoDB se ha utilizado MongooseJS\footnote{\url{http://mongoosejs.com}}, un
 Object Data Modeling (ODM) que envuelve al controlador nativo de conexi'on de Node.js.
+
 \begin{verbatim}
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 \end{verbatim}
+
 Mongoose proporciona un modelado riguroso de los datos mediante el uso de esquemas, reforzando la estructura
 y comprobando la validez de los datos a la vez que se mantiene la flexibilidad que hace a MongoDB tan
 potente. El modo de funcionamiento de Mongoose es el siguiente. Primero se define un esquema:
@@ -604,6 +606,45 @@ colaboradores como haga falta si en el futuro este ganara suficiente popularidad
 
 \subsection{Comunidad}
 \label{sec:comunidad}
+Una de las partes m'as interesantes de una plataforma como la que pretende ser \Nipponline{} es la comunidad web debido
+a muchos motivos. Para empezar, el aprendizaje de un idioma es una tarea lenta que puede desmotivar a menudo en caso
+de que no se aprecien avances, con lo cual estudiar en solitario puede no ser una buena idea. Por el contrario, hacer
+uso de una comunidad online donde todos los usuarios est'an aprendiendo el mismo idioma supone una motivaci'on extra
+y una ayuda a la hora de resolver dudas sobre el idioma. Si a 'esto le a'nadimos un toque de competitividad entre dichos
+usuarios, probablemente los mismos se esfuercen y motiven a'un m'as.
+
+Otro motivo diferente es que \Nipponline{} pretende contener toda la informaci'on posible acerca del idioma y la cultura
+de Jap'on, pero hacer esto entre únicamente desarrolladores es una tarea imposible. Es mucho m'as pr'actico que sean
+los propios usuarios los que creen contenido y compartan noticias e historias sobre la actualidad y la cultura del pa'is,
+por lo que tener una comunidad web se convierte en un requisito indispensable para realizar todo esto.
+
+Cuando hablamos de ``comunidad'' nos estamos refiriendo a un conjunto de herramientas que hace posible que los usuarios
+socialicen entre s'i e intercambien experiencias, como pueden ser foros, chats, blogs, perfiles de usuario personalizables
+y otras herramientas relacionadas. Como puede suponerse, ya existen numerosas herramientas para realizar estas funciones,
+aunque la mayor'ia de ellas usan tecnolog'ias que no nos interesan demasiado o simplemente son servicios de pago.
+Al principio del proyecto se contempl'o la posibilidad de desarrollar estas herramientas tambi'en desde cero usando
+Javascript y Node.js, puesto que as'i podr'iamos crear algo adaptado totalmente a nuestras necesidades. Sin embargo, finalmente
+encontramos una plataforma que ofrec'ia exactamente lo que busc'abamos.
+
+\begin{center}
+\includegraphics[width=0.1\textwidth]{nodebb_icon}
+\includegraphics[width=0.3\textwidth]{nodebb_logo}
+\end{center}
+
+NodeBB\footnote{\url{https://nodebb.org/}} es una plataforma de discusi'on de nueva generaci'on que utiliza web sockets para realizar interacciones
+instant'aneas y tener notificaciones en tiempo real. NodeBB est'a desarrollado con Node.js sobre una base de datos
+Redis (aunque recientemente tambi'en dan soporte a MongoDB), y adem'as es un proyecto de c'odigo abierto que est'a
+en continuo crecimiento gracias a su inmensa comunidad de seguidores. Posee todas las caracter'isticas que busc'abamos,
+como foros, chats y perfiles de usuario, y adem'as usa las mismas tecnolog'ias que \Nipponline{}.
+
+\begin{center}
+\includegraphics[width=1.0\textwidth]{comunidad}
+\end{center}
+
+Por lo tanto, se ha elegido NodeBB como base para crear una comunidad web donde se enlazar'an las aplicaciones del proyecto
+y las lecciones te'oricas del idioma. Al ser un proyecto de c'odigo abierto y estar desarrolado con Node.js, podremos modificarlo
+seg'un nuestras preferencias e incluso aportar mejoras al propio proyecto de NodeBB en caso de que agreguemos alguna funcionalidad
+extra que sea 'util para otros usuarios.
 
 %%%%%%%%%%%%%%
 
