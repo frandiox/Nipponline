@@ -111,6 +111,55 @@ app.get('/words',applications.game1);
 
 Como puede observarse, esto facilita mucho el camino a la hora de crear aplicaciones REST.
 
+\subsubsection{Boilerplate}
+\label{sub:boilerplate}
+Boilerplate son las secciones de c'odigo que se repiten entre proyectos con pocas o ninguna alteraci'on. En nuestro caso, es un c'odigo repetible
+que se encarga de las funcionalidades m'as b'asicas, con lo que sirve de plantilla o gu'ia para empezar una nueva aplicaci'on. Express.js posee
+una funci'on de generador de aplicaciones b'asicas que podr'ia considerarse algo parecido a lo anterior.
+
+Al principio de este proyecto se utiliz'o la estructura de c'odigo que proporciona Express.js por defecto para poder empezar a desarrollar las aplicaciones
+cuanto antes posible. Sin embargo, esta plantilla por defecto de Express.js no est'a preparada para el uso de herramientas extra que nuestro proyecto debe utilizar,
+tales como esquemas y modelos para el controlador de conexi'on a la base de datos o las funciones de comunicaci'on entre cliente y servidor. As'i, tiempo
+despu'es de estar trabajando con este modelo encontramos ciertas limitaciones y caracter'isticas que no terminaron de gustarnos. Y, puesto que
+queremos hacer de \Nipponline{} un proyecto colaborativo donde desarrolladores externos puedan participar, deb'iamos organizar nuestro c'odigo de la
+mejor manera posible para hacerlo entendible. Fue entonces cuando pensamos que quiz'a ser'ia mejor buscar alternativas y consejos de desarrolladores
+m'as avanzados. Despu'es de mucho buscar, finalmente encontramos el Boilerplate que proporciona Jason Krol en su blog\cite{jkrol}.
+
+Este Boilerplate propone el uso de un conjunto de herramientas muy completo, muchas de las cuales ya estamos usando en el proyecto, con lo cual ya sabemos
+que se adec'ua a lo que tenemos, y otras completamente nuevas para nosotros. La mayor'ia de estas nuevas herramientas nos han parecido tan interesantes que
+las hemos estudiado para usarlas en el proyecto m'as adelante:
+
+\begin{itemize}
+ \item Back-end: Node.js, Express.js, Handlebars
+ 
+	Testeo: Mocha, Chai, Sinon, Proxyquire
+	
+ \item Base de datos: MongoDB y MongooseJS
+ 
+ \item Utilidades: Grunt, Bower, Browserify
+ 
+ \item Front-end: Backbone.js, Marionette.js
+ 
+	Testeo: Jasmine, Karma, PhantomJS
+	
+\end{itemize}
+
+Especialmente interesantes son las utilidades, las cuales no conoc'iamos hasta encontrar este Boilerplate. Bower es un instalador de m'odulos para front-end
+(jQuery, underscore, etc), de la misma forma que NPM lo es para Node.js en back-end. Por su parte, Browserify permite desarrollar el c'odigo front-end con un
+estilo modular, de forma que estos m'odulos se usen exactamente de la misma forma que se usan los m'odulos en Node.js. Por 'ultimo, Grunt es la m'as interesante
+de todas: permite crear un ``script'' para automatizar todas las tareas necesarias antes ejecutar el proyecto, tales como instalar dependencias, testeo (TDD),
+uglify, concatenaci'on de archivos, comprimir (minify), transformar LESS/SASS a CSS, ejecutar Node.js y cualquier otra tarea necesaria.
+
+Adoptar este Boilerplate supuso rehacer y reorganizar la mayor'ia del c'odigo que ya ten'iamos en el proyecto, por lo que no fue una tarea sencilla ni r'apida.
+No obstante, consideramos que ha sido un acierto puesto que ahora tenemos una estructura m'as organizada para que el c'odigo sea m'as intuitivo para colaboradores
+externos y para nosotros mismos.
+
+A medida que nuestro proyecto avanza ir'a incorporando el uso de estas herramientas y tecnolog'ias, como por ejemplo Handlebars para hacer templates de HTML o Mocha y Chai
+para temas de TDD (Test-Driven-Development). Ahora s'i, la estructura y organizaci'on de c'odigo que usa este proyecto es por fin compatible con todas estas
+herramientas.
+
+
+
 \subsubsection{Base de datos}
 \label{sub:base_de_datos}
 %nosql
@@ -130,7 +179,7 @@ siendo el m'as importante que en esta base de datos tendr'iamos que describir un
 complejo, ambiguo y con una inmensa cantidad de excepciones y cosas poco comunes como es
 el japon'es. En una base de datos relacional se nos presentar'ian ciertas limitaciones que,
 aunque subsanables, posiblemente ser'ian poco elegantes.
-
+\begin
 \begin{center}
 \includegraphics[width=0.5\textwidth]{nosql}
 \end{center}
@@ -260,11 +309,6 @@ asociar m'etodos a los esquemas y ejecutar consultas sobre los modelos definidos
 de datos con esta estructura. Como puede observarse, en general, Mongoose hace incluso m'as f'acil la conexi'on
 entre Node.js y MongoDB.
 
-
-
-
-\subsubsection{Boilerplate}
-\label{sub:boilerplate}
 
 \subsubsection{Configuraci'on del servidor}
 \label{sub:configuracion_del_servidor}
