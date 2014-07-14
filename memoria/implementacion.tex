@@ -787,9 +787,9 @@ manifest.push({src:"images/app2/bg.png", id:"bg",
 manifest.push({src:"images/app2/power1.gif", id:"power1"});
 \end{verbatim}
 
-el atributo 'src' es obligatorio e indica al servidor la ruta, dentro del directorio public, que ocupa el archivo
-a traer en el servidor, mientras que el atributo 'id' se utiliza para identificar el recurso en concreto. El atributo
-imageType se utiliza para tratar de forma diferente a las im'agenes seg'un sean spritesheets, backgrounds (fondos)
+el atributo ``src'' es obligatorio e indica al servidor la ruta, dentro del directorio public, que ocupa el archivo
+a traer en el servidor, mientras que el atributo ``id'' se utiliza para identificar el recurso en concreto. El atributo
+``imageType'' se utiliza para tratar de forma diferente a las im'agenes seg'un sean spritesheets, backgrounds (fondos)
 o im'agenes normales.
 
 Una vez declarado el manifiesto debemos cargarlo para que PreloadJS se encargue de hacer las peticiones 
@@ -806,10 +806,10 @@ queue.loadManifest(manifest);
 El evento 'progress' tiene lugar cada cierto porcentaje del proceso de carga, y se utiliza el callback asociado a 
 este evento, la funci'on handleProgress, para modificar y hacer avanzar la barra de progreso en la pantalla de carga
 de la aplicaci'on.
-El evento 'fileload' ocurre cada vez que se termina de cargar un archivo del manifiesto y su callback se encarga de
+El evento ``fileload'' ocurre cada vez que se termina de cargar un archivo del manifiesto y su callback se encarga de
 tratar cada uno de los archivos de la forma indicada. As'i, por ejemplo, una imagen de tipo spritesheet es procesada 
 para crear un objeto de animaci'on Sprite de EaselJS.
-El evento 'complete' solo tiene lugar una vez, al terminar de cargar todos los recursos. Su callback, handleComplete,
+El evento ``complete'' solo tiene lugar una vez, al terminar de cargar todos los recursos. Su callback, handleComplete,
 se encarga de ocultar la pantalla de carga y dejar la aplicaci'on en su estado inicial.
 \item \textbf{Internacionalizaci'on.} Todas las aplicaciones hacen uso de la biblioteca i18next, para internacionalizaci'on
 con Javascript. El uso de la biblioteca es simple, basta con hacer una llamada de inicializaci'on al inicio de la
@@ -992,3 +992,47 @@ este disponible, a fin de dar variedad a la aplicaci'on y no usar siempre el mis
 \subsubsection{Pictionary}
 \label{sub:pictionary}
 
+Esta aplicaci'on tiene por objetivo permitir al usuario aprender vocabulario de forma entretenida. Un pictionary de este estilo
+consiste en adivinar una palabra que otro usuario ha dibujado, de forma que se asocie el significado de una palabra con una imagen
+que, por lo general, ser'a un dibujo divertido y f'acil de recordar. 
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{pictionary_capt}
+\end{center}
+
+\textbf{Interfaz y funcionamiento}
+
+Esta aplicaci'on es multijugador, de forma que se necesitar'an al menos dos usuarios para que funcione. Los usuarios entran en la sala
+y uno de ellos elige el turno de dibujo presionando un bot'on para ello. En este momento, al usuario que entra en el turno de dibujo
+se le proporcionar'a una palabra aleatoria en japon'es que tendr'a que representar en un lienzo de dibujo. Podr'a cambiar el color
+del trazo como desee y deber'a dibujar la palabra en un margen de tiempo l'imite. Mientras tanto, el resto de usuarios hacen uso
+de un chat para poder escribir las palabras que ellos crean que coinciden con el dibujo que est'an viendo en tiempo real. En caso de
+que se acierte la palabra en cuesti'on dentro del margen de tiempo l'imite, tanto el usuario que dibuja como el que acierte la
+palabra recibir'an un bonus de puntos y el turno de dibujo se acabar'a. En este momento, cualquier otro usuario puede pulsar el
+bot'on correspondiente y empezar'a un nuevo turno de dibujo, manteniendo las puntuaciones conseguidas previamente.
+
+\textbf{Implementaci'on}
+
+Esta aplicaci'on no ha sido programada desde cero, a diferencia de las dos anteriores, si no que se basa y hace uso de la aplicaci'on
+Pictionary de Dave Frassoni\footnote{\url{http://davefrassoni.com}}. Afortunadamente, el autor especifica que su c'odigo es libre y puede ser modificado sin ning'un problema.
+Adem'as se basa en tecnolog'ias que usamos en este proyecto, como son Javascript, Node.js y Socket.io.
+
+Actualmente esta aplicaci'on est'a bajo desarrollo para poder ser adaptada a nuestras necesidades: uso de nuestra base de datos de japon'es,
+generaci'on de estad'isticas, login de usuarios, etc.
+
+Al ser una aplicaci'on multijugador de estas caracter'isticas, como puede suponerse existir'a una comunicaci'on frecuente entre cliente y
+servidor. El lienzo de dibujo consiste en un canvas de HTML y cada nuevo trazo que se realiza en 'el es enviado al servidor mediante
+Socket.io. El servidor registra este cambio en el lienzo y lo redirige al resto de usuarios.
+
+\vspace{3em}
+\begin{verbatim}
+socket.on('draw', function (line) {
+	if(currentPlayer == socket.id) {
+		canvas.push(line);
+		socket.broadcast.emit('draw', line);
+	}
+});
+\end{verbatim}
+
+Al contrario que las aplicaciones anteriores, este Pictionary no utilizar'a la biblioteca de dibujo CreateJS, puesto que su funcionamiento
+no se asemeja al de un minijuego 2D donde haya que mover objetos en la pantalla, si no que se basa en env'io de datos entre un cliente y los dem'as.
