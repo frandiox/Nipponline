@@ -14,7 +14,7 @@ invertimos una gran parte del tiempo en estudiar las distintas tecnolog'ias disp
 de ellas. En algunas ocasiones no hemos encontrado una herramienta claramente superior a otra, por lo que nuestra decisi'on
 final se basa en cu'al nos ha llamado m'as la atenci'on o cu'al consideramos que ser'a m'as 'util en un futuro.
 
-\subsubsection{Programaci'on front y back-end}
+\subsubsection[Programaci'on front y back-end (FDB)]{Programaci'on front y back-end}
 \label{sub:programacion_front_y_back_end}
 %javascript
 %nodejs
@@ -23,7 +23,7 @@ La primera elecci'on que nos tuvimos que plantear fue el lenguaje de programaci'
 la direcci'on que iba a tomar el proyecto. 
 
 \begin{itemize}
-\item Front-end
+\item \textbf{Front-end}
 \begin{center}
 \includegraphics[width=0.25\textwidth]{javascript}
 \end{center}
@@ -33,15 +33,16 @@ lenguaje apto para ser ejecutado en un navegador web, con lo que nos dejaba con 
 opciones estaba Javascript, un lenguaje potente y bien documentado con una sintaxis que nos resultaba bastante familiar. Aunque existen
 otras alternativas como ActionScript o Dart, nuestra decisi'on en este aspecto estaba clara. 
 
-\item Back-end
-\begin{center}
-\includegraphics[width=0.4\textwidth]{nodejs}
-\end{center}
+\item \textbf{Back-end}
 
 Por otra parte, en cuanto a la programaci'on en el lado del servidor, nosotros ten'iamos cierta experiencia con PHP, pero lo
 consider'abamos un lenguaje algo anticuado y poco llamativo, por lo que intentamos buscar otras alternativas. Dos opciones interesantes
 fueron Ruby, con su framework Ruby-On-Rails\footnote{\url{http://rubyonrails.org}}, y Python con Django\footnote{\url{https://www.djangoproject.com}}. A decir verdad, aunque los primeros est'an muy extendidos en el
 mundo del desarrollo web, nos interesamos m'as por los segundos, que eran algo m'as novedosos y llamativos.
+
+\begin{center}
+\includegraphics[width=0.4\textwidth]{nodejs}
+\end{center}
 
 Sin embargo, cuando nos encontr'abamos en medio del estudio de las posibilidades que nos ofrec'ia Django, descubrimos de manera fortuita
 Node.js\footnote{\url{http://nodejs.org}} y, aunque no era una herramienta tan madura como Ruby-On-Rails o Django, su r'apido crecimiento y algunas otras caracter'isticas
@@ -60,7 +61,7 @@ de m'odulos existentes para esta tecnolog'ia est'a superando a otros gigantes de
 Pero, sobretodo, lo m'as importante es que el tiempo que se invierte en la programaci'on de front o back-end
 tambi'en nos da experiencia en la otra parte, puesto que siempre estamos usando el mismo lenguaje.
 
-\item Aplicaciones m'oviles
+\item \textbf{Aplicaciones m'oviles}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{phonegap}
 \end{center}
@@ -77,7 +78,7 @@ Encontramos, en definitiva, una raz'on m'as para elegir Javascript como piedra a
 \end{itemize}
 
 
-\subsubsection{Web Application Framework}
+\subsubsection[Web Application Framework (FDB)]{Web Application Framework}
 \label{sub:web_application_framework}
 %expressjs
 Es aconsejable el uso de un back-end web framework para facilitar la creaci'on de aplicaciones web. Aunque se puede utilizar Node.js sin m'as,
@@ -111,7 +112,7 @@ app.get('/words',applications.game1);
 
 Como puede observarse, esto facilita mucho el camino a la hora de crear aplicaciones REST.
 
-\subsubsection{Boilerplate}
+\subsubsection[Boilerplate (FDB)]{Boilerplate}
 \label{sub:boilerplate}
 Boilerplate son las secciones de c'odigo que se repiten entre proyectos con pocas o ninguna alteraci'on. En nuestro caso, es un c'odigo repetible
 que se encarga de las funcionalidades m'as b'asicas, con lo que sirve de plantilla o gu'ia para empezar una nueva aplicaci'on. Express.js posee
@@ -147,7 +148,7 @@ las hemos estudiado para usarlas en el proyecto m'as adelante:
 Especialmente interesantes son las utilidades, las cuales no conoc'iamos hasta encontrar este Boilerplate. Bower es un instalador de m'odulos para front-end
 (jQuery, underscore, etc), de la misma forma que NPM lo es para Node.js en back-end. Por su parte, Browserify permite desarrollar el c'odigo front-end con un
 estilo modular, de forma que estos m'odulos se usen exactamente de la misma forma que se usan los m'odulos en Node.js. Por 'ultimo, Grunt es la m'as interesante
-de todas: permite crear un ``script'' para automatizar todas las tareas necesarias antes ejecutar el proyecto, tales como instalar dependencias, testeo (TDD),
+de todas: permite crear un ``script'' para automatizar todas las tareas necesarias antes de ejecutar el proyecto, tales como instalar dependencias, testeo (TDD),
 uglify, concatenaci'on de archivos, comprimir (minify), transformar LESS/SASS a CSS, ejecutar Node.js y cualquier otra tarea necesaria.
 
 Adoptar este Boilerplate supuso rehacer y reorganizar la mayor'ia del c'odigo que ya ten'iamos en el proyecto, por lo que no fue una tarea sencilla ni r'apida.
@@ -160,7 +161,7 @@ herramientas.
 
 
 
-\subsubsection{Base de datos}
+\subsubsection[Base de datos (FDB)]{Base de datos}
 \label{sub:base_de_datos}
 %nosql
 Una de las partes m'as importantes de este proyecto es la base de datos. Describir el idioma
@@ -311,7 +312,7 @@ de datos con esta estructura. Como puede observarse, en general, Mongoose hace i
 entre Node.js y MongoDB.
 
 
-\subsubsection{Configuraci'on del servidor}
+\subsubsection[Configuraci'on del servidor (FDB)]{Configuraci'on del servidor}
 \label{sub:configuracion_del_servidor}
 %nginx
 El proyecto \Nipponline{} est'a alojado en un servidor privado con el cual se pueden realizar demostraciones de las aplicaciones.
@@ -375,7 +376,7 @@ del cliente y enviados al servidor para su posterior almacenamiento. Esto implic
 podr'ian tener una repercusi'on muy grande en la comunidad. Para evitar este problema el servidor realiza una comprobaci'on de los datos obtenidos para
 verificar que no han sido falseados de ninguna forma.
 
-\subsubsection{Comunicaci'on cliente-servidor}
+\subsubsection[Comunicaci'on cliente-servidor (SBP)]{Comunicaci'on cliente-servidor}
 \label{sub:comunicacion_cliente_servidor}
 %socket.io
 
@@ -424,7 +425,7 @@ En el c'odigo anterior simplemente se define una funci'on de callback que se eje
 mensaje marcado como 'acknowledge'. El argumento data de la funci'on es donde se encontrar'an los datos devueltos
 por el servidor (si se devuelven datos).
 
-\subsubsection{Biblioteca de dibujo}
+\subsubsection[Biblioteca de dibujo (SBP)]{Biblioteca de dibujo}
 \label{sub:biblioteca_de_dibujo}
 %createjs
 
@@ -508,7 +509,7 @@ de software libre que utiliza 'unicamente elementos de la misma naturaleza), mot
 es desechada.
 \end{itemize}
 
-\subsubsection{Internacionalizaci'on}
+\subsubsection[Internacionalizaci'on (SBP)]{Internacionalizaci'on}
 \label{sub:internacionalizacion}
 %i18n
 
@@ -563,7 +564,7 @@ concreta que se quiere obtener:
 translation = i18n.t("textField1");
 \end{verbatim}
 
-\subsubsection{Gamificaci'on}
+\subsubsection[Gamificaci'on (SBP)]{Gamificaci'on}
 \label{sub:gamificacion}
 %mozillaBadges
 

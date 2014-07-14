@@ -1,36 +1,36 @@
 \select@language {spanish}
-\contentsline {section}{\numberline {1}Introducci'on}{4}{section.1}
-\contentsline {subsection}{\numberline {1.1}Justificaci'on y descripci'on del proyecto}{4}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}Motivaci'on}{5}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}Alternativas}{6}{subsection.1.3}
-\contentsline {subsection}{\numberline {1.4}Alcance del proyecto}{7}{subsection.1.4}
-\contentsline {section}{\numberline {2}Implementaci'on}{8}{section.2}
-\contentsline {subsection}{\numberline {2.1}Tecnolog'ias y herramientas}{8}{subsection.2.1}
-\contentsline {subsubsection}{\numberline {2.1.1}Programaci'on front y back-end}{8}{subsubsection.2.1.1}
-\contentsline {subsubsection}{\numberline {2.1.2}Web Application Framework}{11}{subsubsection.2.1.2}
-\contentsline {subsubsection}{\numberline {2.1.3}Boilerplate}{12}{subsubsection.2.1.3}
-\contentsline {subsubsection}{\numberline {2.1.4}Base de datos}{14}{subsubsection.2.1.4}
-\contentsline {subsubsection}{\numberline {2.1.5}Configuraci'on del servidor}{19}{subsubsection.2.1.5}
-\contentsline {paragraph}{Servidor HTTP}{19}{section*.2}
-\contentsline {paragraph}{Implementaci'on de sesiones}{20}{section*.3}
-\contentsline {paragraph}{Comprobaciones}{21}{section*.4}
-\contentsline {subsubsection}{\numberline {2.1.6}Comunicaci'on cliente-servidor}{21}{subsubsection.2.1.6}
-\contentsline {subsubsection}{\numberline {2.1.7}Biblioteca de dibujo}{23}{subsubsection.2.1.7}
-\contentsline {subsubsection}{\numberline {2.1.8}Internacionalizaci'on}{26}{subsubsection.2.1.8}
-\contentsline {subsubsection}{\numberline {2.1.9}Gamificaci'on}{27}{subsubsection.2.1.9}
-\contentsline {subsubsection}{\numberline {2.1.10}Control de versiones}{29}{subsubsection.2.1.10}
-\contentsline {subsection}{\numberline {2.2}Comunidad}{33}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Aplicaciones}{35}{subsection.2.3}
-\contentsline {subsubsection}{\numberline {2.3.1}Syllables}{39}{subsubsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.2}Words}{42}{subsubsection.2.3.2}
-\contentsline {subsubsection}{\numberline {2.3.3}Pictionary}{45}{subsubsection.2.3.3}
-\contentsline {section}{\numberline {3}Application Programming Interface (API)}{48}{section.3}
-\contentsline {section}{\numberline {4}Trabajo realizado}{50}{section.4}
-\contentsline {section}{\numberline {5}Licencia}{52}{section.5}
-\contentsline {subsection}{\numberline {5.1}C'odigo}{52}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Media}{53}{subsection.5.2}
-\contentsline {section}{\numberline {6}CUSL y prensa}{55}{section.6}
-\contentsline {section}{\numberline {7}Futuro}{56}{section.7}
-\contentsline {section}{\numberline {8}Conclusiones}{58}{section.8}
-\contentsline {section}{\numberline {9}Agradecimientos}{59}{section.9}
-\contentsline {section}{\numberline {10}Referencias}{60}{section.10}
+\contentsline {section}{\numberline {1}Introducci'on}{5}{section.1}
+\contentsline {subsection}{\numberline {1.1}Justificaci'on y descripci'on del proyecto}{5}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Motivaci'on}{6}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Alternativas}{7}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Alcance del proyecto}{8}{subsection.1.4}
+\contentsline {section}{\numberline {2}Implementaci'on}{9}{section.2}
+\contentsline {subsection}{\numberline {2.1}Tecnolog'ias y herramientas}{9}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Programaci'on front y back-end (FDB)}{9}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}Web Application Framework (FDB)}{12}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}Boilerplate (FDB)}{13}{subsubsection.2.1.3}
+\contentsline {subsubsection}{\numberline {2.1.4}Base de datos (FDB)}{15}{subsubsection.2.1.4}
+\contentsline {subsubsection}{\numberline {2.1.5}Configuraci'on del servidor (FDB)}{20}{subsubsection.2.1.5}
+\contentsline {paragraph}{Servidor HTTP}{20}{section*.2}
+\contentsline {paragraph}{Implementaci'on de sesiones}{21}{section*.3}
+\contentsline {paragraph}{Comprobaciones}{22}{section*.4}
+\contentsline {subsubsection}{\numberline {2.1.6}Comunicaci'on cliente-servidor (SBP)}{22}{subsubsection.2.1.6}
+\contentsline {subsubsection}{\numberline {2.1.7}Biblioteca de dibujo (SBP)}{24}{subsubsection.2.1.7}
+\contentsline {subsubsection}{\numberline {2.1.8}Internacionalizaci'on (SBP)}{27}{subsubsection.2.1.8}
+\contentsline {subsubsection}{\numberline {2.1.9}Gamificaci'on (SBP)}{28}{subsubsection.2.1.9}
+\contentsline {subsubsection}{\numberline {2.1.10}Control de versiones}{30}{subsubsection.2.1.10}
+\contentsline {subsection}{\numberline {2.2}Comunidad}{34}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Aplicaciones}{36}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Syllables}{40}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Words}{43}{subsubsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.3}Pictionary}{46}{subsubsection.2.3.3}
+\contentsline {section}{\numberline {3}Application Programming Interface (API)}{49}{section.3}
+\contentsline {section}{\numberline {4}Trabajo realizado}{51}{section.4}
+\contentsline {section}{\numberline {5}Licencia}{53}{section.5}
+\contentsline {subsection}{\numberline {5.1}C'odigo}{53}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Media}{54}{subsection.5.2}
+\contentsline {section}{\numberline {6}CUSL y prensa}{56}{section.6}
+\contentsline {section}{\numberline {7}Futuro}{57}{section.7}
+\contentsline {section}{\numberline {8}Conclusiones}{59}{section.8}
+\contentsline {section}{\numberline {9}Agradecimientos}{60}{section.9}
+\contentsline {section}{\numberline {10}Referencias}{61}{section.10}
