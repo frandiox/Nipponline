@@ -180,6 +180,7 @@ complejo, ambiguo y con una inmensa cantidad de excepciones y cosas poco comunes
 el japon'es. En una base de datos relacional se nos presentar'ian ciertas limitaciones que,
 aunque subsanables, posiblemente ser'ian poco elegantes.
 
+\vspace{2em}
 \begin{center}
 \includegraphics[width=0.5\textwidth]{nosql}
 \end{center}
@@ -313,6 +314,66 @@ entre Node.js y MongoDB.
 \subsubsection{Configuraci'on del servidor}
 \label{sub:configuracion_del_servidor}
 %nginx
+El proyecto \Nipponline{} est'a alojado en un servidor privado con el cual se pueden realizar demostraciones de las aplicaciones.
+Para el correcto funcionamiento de dichas aplicaciones y de la comunidad web, se han realizado una serie de acciones que se explican 
+a continuaci'on:
+\paragraph{Servidor HTTP}
+
+
+El servidor que se est'a utilizando para el proyecto tiene otras muchas aplicaciones web ejecut'andose cont'inuamente, por lo que
+necesitamos hacer uso de un servidor HTTP (o servidor web) para redireccionar cada URL a la aplicaci'on que corresponda (que usan puertos
+distintos entre s'i). El servidor HTTP elegido ha sido Nginx\footnote{\url{http://nginx.org}}, puesto que es bastante m'as liviano que Apache\footnote{\url{https://httpd.apache.org}} y cubre perfectamente nuestras necesidades.
+La forma de configurar Nginx es la siguiente:
+
+\begin{verbatim}
+server {
+        listen 80;
+
+        server_name japanize.me app.japanize.me;
+
+        location / {
+                proxy_pass http://localhost:3300/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+}
+\end{verbatim}
+
+As'i, siempre que se acceda al servidor a trav'es de la URL ``japanize.me'' o ``app.japanize.me'', Nginx redigir'a a nuestra aplicaci'on, la cual estar'a escuchando en el puerto 3300.
+Lo mismo ocurre con la comunidad web, pero con otro puerto y otra URL (``community.japanize.me''), pues es una aplicaci'on diferente.
+
+Por otra parte, un tema importante a la hora de configurar el servidor es qui'en debe servir qu'e contenido. Existe contenido est'atico, como pueden ser im'agenes, ficheros JS, HTML5 o CSS,
+y tambi'en contenido din'amico, como los HTML generados en el servidor mediante templates (Handlebars, Jade). Node.js podr'ia encargarse de todo perfectamente, pero resulta que
+Nginx es m'as eficiente que Node.js a la hora de servir contenido est'atico por lo que, sobretodo para el caso de las im'agenes, configuraremos nuestro servidor HTTP de esta manera:
+
+\begin{verbatim}
+        location /images {
+                alias /var/node/Nipponline/public/images;
+        }
+\end{verbatim}
+
+Con esta sencilla l'inea en el fichero de configuraci'on, Nginx servir'a el contenido de esta ruta siempre que se solicite.
+
+\paragraph{Implementaci'on de sesiones}
+
+
+Como se puede intuir en la secci'on anterior, nuestra aplicaci'on del proyecto y nuestra comunidad web son dos procesos ejecutados independientemente.
+Nos encontramos, por tanto, con el problema de ``conectar'' ambas aplicaciones (el foro y el servidor de aplicaciones de \Nipponline{}) para que las
+sesiones entre ambas sean compartidas, de foma que iniciar sesi'on en el foro sea equivalente a iniciar sesi'on en las otras aplicaciones y viceversa.
+Para solucionar este problema hemos optado por reproducir el mecanismo de autenticaci'on y creaci'on de cookies que usa la comunidad web (software de terceros)
+en nuestro servidor.
+
+\paragraph{Comprobaciones}
+
+
+En el servidor se almacenan datos estad'isticos sobre los resultados de los usuarios en las distintas aplicaciones. Estos datos son recopilados en el lado
+del cliente y enviados al servidor para su posterior almacenamiento. Esto implica el riesgo de que alg'un usuario falsee un env'io de datos desde la aplicaci'on
+(podr'ia ser modificado, por ejemplo, con la consola de desarrollo de los navegadores web), lo que har'ia que nuestro servidor almacenara datos err'oneos que
+podr'ian tener una repercusi'on muy grande en la comunidad. Para evitar este problema el servidor realiza una comprobaci'on de los datos obtenidos para
+verificar que no han sido falseados de ninguna forma.
 
 \subsubsection{Comunicaci'on cliente-servidor}
 \label{sub:comunicacion_cliente_servidor}
